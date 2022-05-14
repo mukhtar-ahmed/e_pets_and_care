@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "901614377199",
+    "project_id": "e-pets-and-care-83a24",
+    "storage_bucket": "e-pets-and-care-83a24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901614377199:android:86ad75dff1d3153538631a",
+        "android_client_info": {
+          "package_name": "com.mukhtarahmed.e_pets_and_care"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901614377199-gder1uhbnjfuh5stap8nhgg5ecupl1j0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSxSey5CBCBGSlJyteYwyHKQdcKfCVPaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901614377199-gder1uhbnjfuh5stap8nhgg5ecupl1j0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
