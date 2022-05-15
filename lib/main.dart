@@ -1,5 +1,5 @@
 import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/category.dart';
-import 'package:e_pets_and_care/Admin/view/screens/add_pet_screen.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category.dart';
 import 'package:e_pets_and_care/Admin/view/screens/bottom_admin_navigation_bar.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
@@ -85,8 +85,8 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: BottomAdminNavigationBar.id,
               page: () => const BottomAdminNavigationBar()),
-          GetPage(name: AddPetScreen.id, page: () => AddPetScreen()),
           GetPage(name: Category.id, page: () => const Category()),
+          GetPage(name: PetCategory.id, page: () => const PetCategory()),
         ],
       ),
       designSize: const Size(375, 812),

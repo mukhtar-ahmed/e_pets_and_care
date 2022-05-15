@@ -23,7 +23,7 @@ class Category extends StatelessWidget {
             defaultControllerText: '',
             textController: categoryScreenController.titleController,
             onPress: () {
-              Get.back();
+              
               categoryScreenController.sendData();
             },
           );

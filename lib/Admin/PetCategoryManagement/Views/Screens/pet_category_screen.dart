@@ -1,8 +1,6 @@
-// ignore_for_file: unnecessary_null_comparison
-
-import 'package:e_pets_and_care/Admin/CategoryManagement/Controller/category_screen_controller.dart';
-import 'package:e_pets_and_care/Admin/CategoryManagement/Model/category_screen_model.dart';
-import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/add_category_screen.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Controller/pet_category_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/add_pet_category_screen.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
@@ -13,27 +11,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 
-class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({Key? key}) : super(key: key);
+class PetCategoryScreen extends StatelessWidget {
+  static const String id = '/pet_category_screen';
+  const PetCategoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CategoryScreenController>(
-        init: CategoryScreenController(),
-        builder: (categoryScreenController) {
+    return GetBuilder<PetCategoryScreenController>(
+        init: PetCategoryScreenController(),
+        builder: (petScreenController) {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: kWhiteColor,
-              /* ------------------------------ Category Text ----------------------------- */
+              /* --------------------------- Pet Management Text -------------------------- */
               title: Text(
-                'Category',
+                'Pets Category',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w900),
               ),
               // ignore: prefer_const_literals_to_create_immutables
               actions: [
                 /* ------------------------------ Add Category ------------------------------ */
-                const AddCategoryScreen(),
-                //const Category(),
+                const AddPetCategoryScreen(),
               ],
             ),
             body: SingleChildScrollView(
@@ -45,14 +43,16 @@ class CategoryScreen extends StatelessWidget {
                       SizedBox(
                         height: 10.h,
                       ),
-                      /* ----------------------- Category Display Container ----------------------- */
-                      StreamBuilder<List<CategoryScreenModel>>(
-                          stream: categoryScreenController.readCategory(),
+                      /* -------------------------------------------------------------------------- */
+                      /*                            Pet Display Container                           */
+                      /* -------------------------------------------------------------------------- */
+                      StreamBuilder<List<PetCategoryScreenModel>>(
+                          stream: petScreenController.readCategory(),
                           builder: (context, snapShort) {
                             if (snapShort.hasError) {
                               return const Text('Some Thing Wrong');
                             } else if (snapShort.hasData) {
-                              final category = snapShort.data!;
+                              final pet = snapShort.data!;
 
                               return GridView.builder(
                                   shrinkWrap: true,
@@ -65,7 +65,7 @@ class CategoryScreen extends StatelessWidget {
                                           mainAxisExtent: 191),
                                   itemCount: snapShort.data!.length,
                                   itemBuilder: (BuildContext context, index) {
-                                    return buildCategory(
+                                    return buildPetContainer(
                                         index1: snapShort.data![index]);
                                   });
                             } else {
@@ -81,12 +81,14 @@ class CategoryScreen extends StatelessWidget {
         });
   }
 
-  Widget buildCategory({CategoryScreenModel? index1}) {
-    return GetBuilder<CategoryScreenController>(
-        init: CategoryScreenController(),
-        builder: (categoryScreenController) {
+  Widget buildPetContainer({PetCategoryScreenModel? index1}) {
+    return GetBuilder<PetCategoryScreenController>(
+        init: PetCategoryScreenController(),
+        builder: (petScreenController) {
           return Container(
-            decoration: BoxDecoration(border: Border.all(color: kPrimaryColor)),
+            decoration: BoxDecoration(
+              border: Border.all(color: kPrimaryColor),
+            ),
             height: 200.h,
             width: 180.w,
             child: Column(
@@ -135,7 +137,7 @@ class CategoryScreen extends StatelessWidget {
                       SizedBox(
                           width: 72.w,
                           child: Text(
-                            index1.title.toString(),
+                            index1.petName.toString(),
                             style: TextStyle(fontSize: 14.sp),
                           ))
                     ],
@@ -156,9 +158,9 @@ class CategoryScreen extends StatelessWidget {
                         onTap: () {
                           /* ------------------------------------ . ----------------------------------- */
                           Get.bottomSheet(
-                            GetBuilder<CategoryScreenController>(
-                                init: CategoryScreenController(),
-                                builder: (categoryScreenController) {
+                            GetBuilder<PetCategoryScreenController>(
+                                init: PetCategoryScreenController(),
+                                builder: (petCategoryScreenController) {
                                   return SingleChildScrollView(
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -170,7 +172,7 @@ class CategoryScreen extends StatelessWidget {
                                       ),
                                       height: 600.h,
                                       child: Form(
-                                        key: categoryScreenController.formKey,
+                                        key: petScreenController.formKey,
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 25.w),
@@ -186,7 +188,7 @@ class CategoryScreen extends StatelessWidget {
                                                         .spaceEvenly,
                                                 children: [
                                                   Text(
-                                                    'Edit Category',
+                                                    'Edit Pet Category',
                                                     style: TextStyle(
                                                         fontSize: 20.sp,
                                                         fontWeight:
@@ -203,7 +205,7 @@ class CategoryScreen extends StatelessWidget {
                                                     value: index1.active!,
                                                     onToggle: (val) {
                                                       index1.active =
-                                                          categoryScreenController
+                                                          petScreenController
                                                               .updateActive(
                                                                   val);
                                                     },
@@ -213,16 +215,17 @@ class CategoryScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 10.h,
                                               ),
+                                              /* -------------------------------------------------------------------------- */
+                                              /*                                 Pet Picture                                */
+                                              /* -------------------------------------------------------------------------- */
 
-                                              /* ---------------------------- Categeory Picture --------------------------- */
                                               CircleAvatar(
                                                 radius: 100.r,
                                                 backgroundImage:
-                                                    categoryScreenController
-                                                                .image !=
+                                                    petScreenController.image !=
                                                             null
                                                         ? FileImage(
-                                                                categoryScreenController
+                                                                petScreenController
                                                                     .image!)
                                                             as ImageProvider
                                                         : NetworkImage(
@@ -232,9 +235,8 @@ class CategoryScreen extends StatelessWidget {
                                                 child: Stack(children: [
                                                   // ignore: prefer_const_constructors
                                                   GestureDetector(
-                                                    onTap:
-                                                        categoryScreenController
-                                                            .selectFile,
+                                                    onTap: petScreenController
+                                                        .selectFile,
                                                     child: Align(
                                                       alignment:
                                                           Alignment.bottomRight,
@@ -254,13 +256,13 @@ class CategoryScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 20.h,
                                               ),
-                                              /* -------------------------- Title / Category Name ------------------------- */
+                                              /* -------------------------- Title / Pet Name ------------------------- */
                                               SizedBox(
                                                 height: 60.h,
                                                 child: Column(
                                                   children: [
                                                     CustomeTextFieldLabel(
-                                                      labelText: "Title",
+                                                      labelText: "Pet Name",
                                                       textAlign:
                                                           TextAlign.start,
                                                       fontSized: 14.sp,
@@ -274,9 +276,9 @@ class CategoryScreen extends StatelessWidget {
                                                     CustomeTextFormField(
                                                       //labelText: index1.title,
                                                       defaultControllerText:
-                                                          index1.title!,
+                                                          index1.petName!,
                                                       textController:
-                                                          categoryScreenController
+                                                          petScreenController
                                                               .titleController,
                                                       isObscure: false,
                                                       validate: (value) {
@@ -305,9 +307,9 @@ class CategoryScreen extends StatelessWidget {
                                                 buttonText: 'Update',
                                                 horPadding: 50,
                                                 onPressed: () {
-                                                  Get.back();
-                                                  categoryScreenController
-                                                      .updateCategory(index1);
+                                                  petScreenController
+                                                      .updatePetCategory(
+                                                          index1);
                                                 },
                                               ),
                                             ],
@@ -318,7 +320,6 @@ class CategoryScreen extends StatelessWidget {
                                   );
                                 }),
                           );
-                          //categoryScreenController.updateCategory(index1);
                         },
                         child: SizedBox(
                           width: 72.w,
@@ -335,7 +336,7 @@ class CategoryScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          categoryScreenController.deleteCategory(index1);
+                          petScreenController.deletePetCategory(index1);
                         },
                         child: SizedBox(
                           width: 72.w,

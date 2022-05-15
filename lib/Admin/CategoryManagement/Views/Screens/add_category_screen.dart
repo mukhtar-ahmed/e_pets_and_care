@@ -1,6 +1,5 @@
 import 'package:e_pets_and_care/Admin/CategoryManagement/Controller/category_screen_controller.dart';
 import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/category.dart';
-import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Widget/category_page.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';

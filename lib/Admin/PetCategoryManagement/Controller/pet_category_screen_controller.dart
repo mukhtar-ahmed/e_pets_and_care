@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_pets_and_care/Admin/CategoryManagement/Model/category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-class CategoryScreenController extends GetxController {
+class PetCategoryScreenController extends GetxController {
   File? image;
   late String imageUrl;
   late XFile photo;
@@ -16,12 +16,7 @@ class CategoryScreenController extends GetxController {
   TextEditingController titleController = TextEditingController();
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   late bool isActive = false;
-  CategoryScreenModel categoryScreenModel = CategoryScreenModel();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  PetCategoryScreenModel petCategoryScreenModel = PetCategoryScreenModel();
 
   bool updateActive(value) {
     update();
@@ -33,22 +28,23 @@ class CategoryScreenController extends GetxController {
   sendData() async {
     if (formKey.currentState!.validate()) {
       final fileName = basename(image!.path);
-      var storageImage = FirebaseStorage.instance.ref('category/$fileName');
+      var storageImage = FirebaseStorage.instance.ref('petCategory/$fileName');
       var task = storageImage.putFile(image!);
       imageUrl = await (await task).ref.getDownloadURL();
 
-      final docRef = FirebaseFirestore.instance.collection("category").doc();
+      final docRef =
+          FirebaseFirestore.instance.collection("pet_category").doc();
 
-      categoryScreenModel.title = titleController.text;
+      petCategoryScreenModel.petName = titleController.text;
 
-      categoryScreenModel.imageUrl = imageUrl;
-      categoryScreenModel.active = isActive;
-      categoryScreenModel.category_id = docRef.id;
+      petCategoryScreenModel.imageUrl = imageUrl;
+      petCategoryScreenModel.active = isActive;
+      petCategoryScreenModel.petCategoryId = docRef.id;
 
       await firebaseFirestore
-          .collection('category')
+          .collection('pet_category')
           .doc(docRef.id)
-          .set(categoryScreenModel.toMap());
+          .set(petCategoryScreenModel.toMap());
       Get.back();
     }
   }
@@ -64,18 +60,17 @@ class CategoryScreenController extends GetxController {
     update();
   }
 
-  Stream<List<CategoryScreenModel>> readCategory() => FirebaseFirestore.instance
-      .collection('category')
-      .snapshots()
-      .map((snapshots) => snapshots.docs
-          .map((doc) => CategoryScreenModel.fromMap(doc.data()))
-          .toList());
+  Stream<List<PetCategoryScreenModel>> readCategory() =>
+      FirebaseFirestore.instance.collection('pet_category').snapshots().map(
+          (snapshots) => snapshots.docs
+              .map((doc) => PetCategoryScreenModel.fromMap(doc.data()))
+              .toList());
 /* -------------------------------------------------------------------------- */
 /*                               Delete Category                              */
 /* -------------------------------------------------------------------------- */
-  void deleteCategory(CategoryScreenModel index1) async {
+  void deletePetCategory(PetCategoryScreenModel index1) async {
     final category =
-        firebaseFirestore.collection("category").doc(index1.category_id);
+        firebaseFirestore.collection("pet_category").doc(index1.petCategoryId);
     category.delete();
     update();
   }
@@ -83,20 +78,20 @@ class CategoryScreenController extends GetxController {
 /* -------------------------------------------------------------------------- */
 /*                                Edit Category                               */
 /* -------------------------------------------------------------------------- */
-  void updateCategory(CategoryScreenModel index1) async {
+  void updatePetCategory(PetCategoryScreenModel index1) async {
     final fileName = basename(image!.path);
-    var storageImage = FirebaseStorage.instance.ref('category/$fileName');
+    var storageImage = FirebaseStorage.instance.ref('petCategory/$fileName');
     var task = storageImage.putFile(image!);
     imageUrl = await (await task).ref.getDownloadURL();
     // final category = firebaseFirestore.collection("category").doc('uid');
     final category =
-        firebaseFirestore.collection("category").doc(index1.category_id);
-    categoryScreenModel.title = titleController.text;
+        firebaseFirestore.collection("pet_category").doc(index1.petCategoryId);
+    petCategoryScreenModel.petName = titleController.text;
 
-    categoryScreenModel.imageUrl = imageUrl;
-    categoryScreenModel.active = isActive;
+    petCategoryScreenModel.imageUrl = imageUrl;
+    petCategoryScreenModel.active = isActive;
 
-    await category.update(categoryScreenModel.toMap());
+    await category.update(petCategoryScreenModel.toMap());
 
     // category.update({
     //   'title': titleController.text,
