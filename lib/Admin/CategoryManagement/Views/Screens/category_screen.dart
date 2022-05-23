@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -18,6 +19,7 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textfieldtext;
     return GetBuilder<CategoryScreenController>(
         init: CategoryScreenController(),
         builder: (categoryScreenController) {
@@ -54,20 +56,89 @@ class CategoryScreen extends StatelessWidget {
                             } else if (snapShort.hasData) {
                               final category = snapShort.data!;
 
-                              return GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisSpacing: 20,
-                                          crossAxisSpacing: 10,
-                                          crossAxisCount: 2,
-                                          mainAxisExtent: 191),
-                                  itemCount: snapShort.data!.length,
-                                  itemBuilder: (BuildContext context, index) {
-                                    return buildCategory(
-                                        index1: snapShort.data![index]);
-                                  });
+                              return Column(
+                                children: [
+                                  /* -------------------------------------------------------------------------- */
+                                  /*                                Search Field                                */
+                                  /* -------------------------------------------------------------------------- */
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 10),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 3, 0, 3),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffEDF0F4),
+                                      // color: Colors.red,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                    ),
+                                    child: TextFormField(
+                                      controller: categoryScreenController
+                                          .searchController,
+                                      decoration: InputDecoration(
+                                        // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                                        hintText: 'Search',
+                                        border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                            icon: const Icon(
+                                                FontAwesomeIcons.xmark),
+                                            onPressed: () {}),
+                                      ),
+                                      onChanged: (String query) {
+                                        textfieldtext = categoryScreenController
+                                            .searchController.text
+                                            .trim();
+                                        final suggestions = snapShort.data!
+                                            .where((categoryfilter) {
+                                          final categoryTitle = categoryfilter
+                                              .title!
+                                              .toLowerCase();
+                                          final input = query.toLowerCase();
+                                          return categoryTitle.contains(input);
+                                        }).toList();
+                                        categoryScreenController
+                                            .addFill(suggestions);
+                                        // setState(() {
+                                        //   addMedicineScreenController.fil =
+                                        //       suggestions;
+                                        // });
+                                      },
+                                    ),
+                                  ),
+
+                                  /* -------------------------------------------------------------------------- */
+                                  /*                              Search Field End                              */
+                                  /* -------------------------------------------------------------------------- */
+
+                                  GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: const ScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              mainAxisSpacing: 20,
+                                              crossAxisSpacing: 10,
+                                              crossAxisCount: 2,
+                                              mainAxisExtent: 191),
+                                      itemCount: categoryScreenController
+                                                  .searchController.text
+                                                  .trim() !=
+                                              ''
+                                          ? categoryScreenController.fil.length
+                                          : snapShort.data!.length,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return buildCategory(
+                                            index1: categoryScreenController
+                                                        .searchController.text
+                                                        .trim() !=
+                                                    ''
+                                                ? categoryScreenController
+                                                    .fil[index]
+                                                : snapShort.data![index]);
+                                      }),
+                                ],
+                              );
                             } else {
                               return const Center(child: CircleAvatar());
                             }
@@ -305,7 +376,6 @@ class CategoryScreen extends StatelessWidget {
                                                 buttonText: 'Update',
                                                 horPadding: 50,
                                                 onPressed: () {
-                                                  Get.back();
                                                   categoryScreenController
                                                       .updateCategory(index1);
                                                 },

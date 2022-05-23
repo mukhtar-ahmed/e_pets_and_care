@@ -1,9 +1,7 @@
-// ignore_for_file: unnecessary_null_comparison, duplicate_ignore
-
-import 'package:e_pets_and_care/Admin/MedicineManagement/Controller/add_medicine_screen_controller.dart';
-import 'package:e_pets_and_care/Admin/MedicineManagement/Model/medicine_model.dart';
-import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/add_medicine_screen.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Controller/add_pet_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/add_pet_screen.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
@@ -15,18 +13,17 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class MedicineScreen extends StatelessWidget {
-  MedicineScreen({Key? key}) : super(key: key);
-
-  AddMedicineScreenController addMedicineScreenController =
-      Get.put(AddMedicineScreenController());
+class PetScreen extends StatelessWidget {
+  PetScreen({Key? key}) : super(key: key);
+  AddPetScreenCotroller addPetScreenCotroller =
+      Get.put(AddPetScreenCotroller());
 
   @override
   Widget build(BuildContext context) {
     var textfieldtext;
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Medicine'),
+          title: const Text('Pet'),
           backgroundColor: kWhiteColor,
           actions: [
             GestureDetector(
@@ -48,7 +45,7 @@ class MedicineScreen extends StatelessWidget {
                       width: 6.w,
                     ),
                     Text(
-                      'Add Medicine',
+                      'Add Pet',
                       style: TextStyle(
                           fontWeight: FontWeight.w900, fontSize: 14.sp),
                     ),
@@ -56,13 +53,13 @@ class MedicineScreen extends StatelessWidget {
                 ),
               ),
               onTap: () async {
-                Get.toNamed(AddMedicineScreen.id);
+                Get.toNamed(AddPetScreen.id);
               },
             ),
           ]),
-      body: GetBuilder<AddMedicineScreenController>(
-          init: AddMedicineScreenController(),
-          builder: (addMedicineScreenController) {
+      body: GetBuilder<AddPetScreenCotroller>(
+          init: AddPetScreenCotroller(),
+          builder: (addPetScreenCotroller) {
             return SingleChildScrollView(
               child: Center(
                 child: SizedBox(
@@ -73,11 +70,10 @@ class MedicineScreen extends StatelessWidget {
                         height: 10.h,
                       ),
                       /* -------------------------------------------------------------------------- */
-                      /*                         Medicine Display Container                         */
+                      /*                         Pet Display Container                         */
                       /* -------------------------------------------------------------------------- */
-                      StreamBuilder<List<MedicineModel>>(
-                          stream: addMedicineScreenController
-                              .readMedicineCategory(),
+                      StreamBuilder<List<PetModel>>(
+                          stream: addPetScreenCotroller.readPetCategory(),
                           builder: (context, snapShort) {
                             if (snapShort.hasError) {
                               return const Text('Some Thing Wrong');
@@ -102,7 +98,7 @@ class MedicineScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: TextFormField(
-                                      controller: addMedicineScreenController
+                                      controller: addPetScreenCotroller
                                           .searchController,
                                       decoration: InputDecoration(
                                         // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
@@ -114,19 +110,18 @@ class MedicineScreen extends StatelessWidget {
                                             onPressed: () {}),
                                       ),
                                       onChanged: (String query) {
-                                        textfieldtext =
-                                            addMedicineScreenController
-                                                .searchController.text
-                                                .trim();
+                                        textfieldtext = addPetScreenCotroller
+                                            .searchController.text
+                                            .trim();
                                         final suggestions = snapShort.data!
                                             .where((categoryfilter) {
                                           final categoryTitle = categoryfilter
-                                              .medicineName!
+                                              .petName!
                                               .toLowerCase();
                                           final input = query.toLowerCase();
                                           return categoryTitle.contains(input);
                                         }).toList();
-                                        addMedicineScreenController
+                                        addPetScreenCotroller
                                             .addFill(suggestions);
                                         // setState(() {
                                         //   addMedicineScreenController.fil =
@@ -139,6 +134,7 @@ class MedicineScreen extends StatelessWidget {
                                   /* -------------------------------------------------------------------------- */
                                   /*                              Search Field End                              */
                                   /* -------------------------------------------------------------------------- */
+
                                   GridView.builder(
                                       shrinkWrap: true,
                                       physics: const ScrollPhysics(),
@@ -148,21 +144,20 @@ class MedicineScreen extends StatelessWidget {
                                               crossAxisSpacing: 0,
                                               crossAxisCount: 2,
                                               mainAxisExtent: 296),
-                                      itemCount: addMedicineScreenController
+                                      itemCount: addPetScreenCotroller
                                                   .searchController.text
                                                   .trim() !=
                                               ''
-                                          ? addMedicineScreenController
-                                              .fil.length
+                                          ? addPetScreenCotroller.fil.length
                                           : snapShort.data!.length,
                                       itemBuilder:
                                           (BuildContext context, index) {
-                                        return buildMedicineContainer(
-                                            index1: addMedicineScreenController
+                                        return buildPetContainer(
+                                            index1: addPetScreenCotroller
                                                         .searchController.text
                                                         .trim() !=
                                                     ''
-                                                ? addMedicineScreenController
+                                                ? addPetScreenCotroller
                                                     .fil[index]
                                                 : snapShort.data![index]);
                                       }),
@@ -181,7 +176,7 @@ class MedicineScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMedicineContainer({MedicineModel? index1}) {
+  Widget buildPetContainer({PetModel? index1}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       child: Container(
@@ -225,9 +220,9 @@ class MedicineScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /* ----------------------------- Name Of Medicine ---------------------------- */
+                      /* ----------------------------- Name Of Pet ---------------------------- */
                       CustomeTextFieldLabel(
-                        labelText: index1.medicineName.toString(),
+                        labelText: index1.petName.toString(),
                         textAlign: TextAlign.start,
                         fontSized: 14.sp,
                         color: Colors.black,
@@ -236,11 +231,11 @@ class MedicineScreen extends StatelessWidget {
                       SizedBox(
                         height: 4.h,
                       ),
-                      /* -------------------------- Medicine Description -------------------------- */
+                      /* -------------------------- Pet Description -------------------------- */
                       // ignore: prefer_const_constructors
                       Flexible(
                         child: Text(
-                          index1.medicineDescription.toString(),
+                          index1.petDescription.toString(),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -252,7 +247,7 @@ class MedicineScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'RS: ${index1.medicinePrice}',
+                            'RS: ${index1.petPrice}',
                             style: TextStyle(
                                 fontSize: 18.sp, fontWeight: FontWeight.w900),
                           ),
@@ -278,7 +273,7 @@ class MedicineScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          addMedicineScreenController.deleteMedicine(index1);
+                          addPetScreenCotroller.deletePet(index1);
                         },
                         child: SizedBox(
                           width: 73.w,
@@ -299,9 +294,9 @@ class MedicineScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.bottomSheet(
-                            GetBuilder<AddMedicineScreenController>(
-                                init: AddMedicineScreenController(),
-                                builder: (addMedicineScreenController) {
+                            GetBuilder<AddPetScreenCotroller>(
+                                init: AddPetScreenCotroller(),
+                                builder: (addPetScreenCotroller) {
                                   return SingleChildScrollView(
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -313,8 +308,7 @@ class MedicineScreen extends StatelessWidget {
                                       ),
                                       height: 720.h,
                                       child: Form(
-                                        key:
-                                            addMedicineScreenController.formKey,
+                                        key: addPetScreenCotroller.formKey,
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 25.w),
@@ -323,14 +317,14 @@ class MedicineScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 10.h,
                                               ),
-                                              /* ------------------------- Edit Medicine & Active ------------------------- */
+                                              /* ------------------------- Edit Pet & Active ------------------------- */
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
                                                   Text(
-                                                    'Edit Medicine',
+                                                    'Edit Pet',
                                                     style: TextStyle(
                                                         fontSize: 20.sp,
                                                         fontWeight:
@@ -347,7 +341,7 @@ class MedicineScreen extends StatelessWidget {
                                                     value: index1.active!,
                                                     onToggle: (val) {
                                                       index1.active =
-                                                          addMedicineScreenController
+                                                          addPetScreenCotroller
                                                               .updateActive(
                                                                   val);
                                                     },
@@ -358,15 +352,15 @@ class MedicineScreen extends StatelessWidget {
                                                 height: 10.h,
                                               ),
 
-                                              /* ---------------------------- Medicine Picture --------------------------- */
+                                              /* ---------------------------- Pet Picture --------------------------- */
                                               CircleAvatar(
                                                 radius: 100.r,
                                                 backgroundImage:
-                                                    addMedicineScreenController
+                                                    addPetScreenCotroller
                                                                 .image !=
                                                             null
                                                         ? FileImage(
-                                                                addMedicineScreenController
+                                                                addPetScreenCotroller
                                                                     .image!)
                                                             as ImageProvider
                                                         : NetworkImage(
@@ -376,9 +370,8 @@ class MedicineScreen extends StatelessWidget {
                                                 child: Stack(children: [
                                                   // ignore: prefer_const_constructors
                                                   GestureDetector(
-                                                    onTap:
-                                                        addMedicineScreenController
-                                                            .selectFile,
+                                                    onTap: addPetScreenCotroller
+                                                        .selectFile,
                                                     child: Align(
                                                       alignment:
                                                           Alignment.bottomRight,
@@ -398,14 +391,13 @@ class MedicineScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 20.h,
                                               ),
-                                              /* -------------------------- Title / Medicine Name ------------------------- */
+                                              /* -------------------------- Title / Pet Name ------------------------- */
                                               SizedBox(
                                                 height: 60.h,
                                                 child: Column(
                                                   children: [
                                                     CustomeTextFieldLabel(
-                                                      labelText:
-                                                          "Medicine Name",
+                                                      labelText: "Pet Name",
                                                       textAlign:
                                                           TextAlign.start,
                                                       fontSized: 14.sp,
@@ -419,10 +411,10 @@ class MedicineScreen extends StatelessWidget {
                                                     CustomeTextFormField(
                                                       //labelText: index1.title,
                                                       defaultControllerText:
-                                                          index1.medicineName!,
+                                                          index1.petName!,
                                                       textController:
-                                                          addMedicineScreenController
-                                                              .medicineNameController,
+                                                          addPetScreenCotroller
+                                                              .petNameController,
                                                       isObscure: false,
                                                       validate: (value) {
                                                         if (value != null &&
@@ -444,10 +436,10 @@ class MedicineScreen extends StatelessWidget {
                                                 height: 20.h,
                                               ),
                                               /* -------------------------------------------------------------------------- */
-                                              /*                               Medicine Price                               */
+                                              /*                               Pet Price                               */
                                               /* -------------------------------------------------------------------------- */
                                               CustomeTextFieldLabel(
-                                                labelText: "Medicine Price",
+                                                labelText: "Pet Price",
                                                 textAlign: TextAlign.start,
                                                 fontSized: 14.sp,
                                                 color: Colors.black,
@@ -459,12 +451,11 @@ class MedicineScreen extends StatelessWidget {
                                               CustomeTextFormField(
                                                 keyboardType:
                                                     TextInputType.number,
-                                                defaultControllerText: index1
-                                                    .medicinePrice
-                                                    .toString(),
+                                                defaultControllerText:
+                                                    index1.petPrice.toString(),
                                                 textController:
-                                                    addMedicineScreenController
-                                                        .medicinePriceController,
+                                                    addPetScreenCotroller
+                                                        .petPriceController,
                                                 isObscure: false,
                                                 validate: (value) {
                                                   if (value!.isEmpty) {
@@ -494,9 +485,8 @@ class MedicineScreen extends StatelessWidget {
                                               ),
                                               StreamBuilder<
                                                   List<PetCategoryScreenModel>>(
-                                                stream:
-                                                    addMedicineScreenController
-                                                        .readCategory(),
+                                                stream: addPetScreenCotroller
+                                                    .readCategory(),
                                                 builder: (context, snapshot) {
                                                   if (!snapshot.hasData) {
                                                     return const Center(
@@ -504,7 +494,7 @@ class MedicineScreen extends StatelessWidget {
                                                           CupertinoActivityIndicator(),
                                                     );
                                                   } else if (snapshot.hasData) {
-                                                    addMedicineScreenController
+                                                    addPetScreenCotroller
                                                         .categoryIten!
                                                         .clear();
                                                     for (int i = 0;
@@ -512,21 +502,21 @@ class MedicineScreen extends StatelessWidget {
                                                             snapshot
                                                                 .data!.length;
                                                         i++) {
-                                                      addMedicineScreenController
+                                                      addPetScreenCotroller
                                                               .index =
                                                           snapshot.data![i];
 
-                                                      addMedicineScreenController
+                                                      addPetScreenCotroller
                                                           .categoryIten!
                                                           .add(
                                                         DropdownMenuItem(
                                                           child: Text(
-                                                            addMedicineScreenController
+                                                            addPetScreenCotroller
                                                                 .index.petName
                                                                 .toString(),
                                                           ),
                                                           value:
-                                                              addMedicineScreenController
+                                                              addPetScreenCotroller
                                                                   .index.petName
                                                                   .toString(),
                                                         ),
@@ -535,13 +525,12 @@ class MedicineScreen extends StatelessWidget {
                                                   }
                                                   return DropdownButtonFormField<
                                                       dynamic>(
-                                                    items:
-                                                        addMedicineScreenController
-                                                            .categoryIten,
+                                                    items: addPetScreenCotroller
+                                                        .categoryIten,
                                                     onChanged: (categoryValue) {
                                                       Get.snackbar('Error',
                                                           categoryValue);
-                                                      addMedicineScreenController
+                                                      addPetScreenCotroller
                                                           .updateMenuValue(
                                                               categoryValue);
                                                     },
@@ -559,10 +548,9 @@ class MedicineScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 20.h,
                                               ),
-                                              /* ---------------------------- Descrition of Medicine --------------------------- */
+                                              /* ---------------------------- Descrition of Pet --------------------------- */
                                               CustomeTextFieldLabel(
-                                                labelText:
-                                                    "Medicine Description",
+                                                labelText: "Pet Description",
                                                 textAlign: TextAlign.start,
                                                 fontSized: 14.sp,
                                                 color: Colors.black,
@@ -572,11 +560,10 @@ class MedicineScreen extends StatelessWidget {
                                                 height: 6.h,
                                               ),
                                               TextFormField(
-                                                controller:
-                                                    addMedicineScreenController
-                                                        .medicineDescriptionController
-                                                      ..text = index1
-                                                          .medicineDescription!,
+                                                controller: addPetScreenCotroller
+                                                    .petDescriptionController
+                                                  ..text =
+                                                      index1.petDescription!,
                                                 maxLines: 3,
                                                 validator: (value) {
                                                   if (value != null &&
@@ -604,7 +591,7 @@ class MedicineScreen extends StatelessWidget {
                                                 horPadding: 50,
                                                 onPressed: () {
                                                   Get.back();
-                                                  addMedicineScreenController
+                                                  addPetScreenCotroller
                                                       .updateCategory(index1);
                                                 },
                                               ),

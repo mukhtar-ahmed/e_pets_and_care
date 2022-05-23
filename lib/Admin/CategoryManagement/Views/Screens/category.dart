@@ -20,10 +20,10 @@ class Category extends StatelessWidget {
                 : const NetworkImage("null") as ImageProvider,
             isActiveText:
                 categoryScreenController.isActive ? 'Active' : 'Inactive',
-            defaultControllerText: '',
+            defaultControllerText:
+                categoryScreenController.titleController.text,
             textController: categoryScreenController.titleController,
             onPress: () {
-              
               categoryScreenController.sendData();
             },
           );

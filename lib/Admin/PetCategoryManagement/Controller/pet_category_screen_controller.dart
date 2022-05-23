@@ -17,6 +17,13 @@ class PetCategoryScreenController extends GetxController {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   late bool isActive = false;
   PetCategoryScreenModel petCategoryScreenModel = PetCategoryScreenModel();
+  TextEditingController searchController = TextEditingController();
+  List<PetCategoryScreenModel> fil = [];
+
+  addFill(suggestions) {
+    fil = suggestions;
+    update();
+  }
 
   bool updateActive(value) {
     update();

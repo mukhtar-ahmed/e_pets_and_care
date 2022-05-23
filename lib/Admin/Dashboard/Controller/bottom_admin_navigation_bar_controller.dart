@@ -1,24 +1,37 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/category_screen.dart';
+import 'package:e_pets_and_care/Admin/Dashboard/Views/Screens/dashboard_screen.dart';
 import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/food_screen.dart';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/medicine_screen.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category_screen.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/pet_screen.dart';
+import 'package:e_pets_and_care/Admin/UserManagement/Views/Screens/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class BottomAdminNavigationBarController extends GetxController {
-  int index = 1;
+  int index = 3;
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
   final item = <Widget>[
     const CustomeContainerOfNavigationBar(
-      icon: Icons.pets,
-      text: "Pets Category",
+      icon: Icons.menu,
+      text: "Category",
       fontSize: 8,
     ),
     const CustomeContainerOfNavigationBar(
       icon: Icons.category,
-      text: "Category",
+      text: "Pets Category",
+      fontSize: 8,
+    ),
+    const CustomeContainerOfNavigationBar(
+      icon: Icons.pets,
+      text: "Pet",
+      fontSize: 8,
+    ),
+    const CustomeContainerOfNavigationBar(
+      icon: Icons.dashboard,
+      text: "Dashboard",
       fontSize: 8,
     ),
     const CustomeContainerOfNavigationBar(
@@ -31,12 +44,20 @@ class BottomAdminNavigationBarController extends GetxController {
       text: "Food",
       fontSize: 8,
     ),
+    const CustomeContainerOfNavigationBar(
+      icon: Icons.person,
+      text: "User",
+      fontSize: 8,
+    ),
   ];
   final screens = [
-    const PetCategoryScreen(),
     const CategoryScreen(),
-    const MedicineScreen(),
-    const FoodScreen()
+    const PetCategoryScreen(),
+    PetScreen(),
+    DashboardScreen(),
+    MedicineScreen(),
+    FoodScreen(),
+    const UserScreen(),
   ];
 
   updateindex(index1) {

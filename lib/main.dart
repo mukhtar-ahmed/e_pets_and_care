@@ -1,6 +1,9 @@
 import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/category.dart';
+import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/add_food_screen.dart';
+import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/add_medicine_screen.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category.dart';
-import 'package:e_pets_and_care/Admin/view/screens/bottom_admin_navigation_bar.dart';
+import 'package:e_pets_and_care/Admin/Dashboard/Views/Screens/bottom_admin_navigation_bar.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/add_pet_screen.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
 import 'package:e_pets_and_care/view/screens/edit_profile_screen.dart';
@@ -8,7 +11,6 @@ import 'package:e_pets_and_care/view/screens/email_verification_screen.dart';
 import 'package:e_pets_and_care/view/screens/first_screen.dart';
 import 'package:e_pets_and_care/view/screens/forgot_password_screen.dart';
 import 'package:e_pets_and_care/view/screens/home_screen.dart';
-import 'package:e_pets_and_care/view/screens/product_add_screen.dart';
 import 'package:e_pets_and_care/view/screens/registration_fb_google_screen.dart';
 import 'package:e_pets_and_care/view/screens/registration_screen.dart';
 import 'package:e_pets_and_care/view/screens/signin_screen.dart';
@@ -55,8 +57,6 @@ class MyApp extends StatelessWidget {
               page: () => const EditProfileScreen()),
           GetPage(name: UnbordingScreen.id, page: () => UnbordingScreen()),
           GetPage(
-              name: ProductAddScreen.id, page: () => const ProductAddScreen()),
-          GetPage(
               name: UserSelectionScreen.id,
               page: () => const UserSelectionScreen()),
           GetPage(name: FirstScreen.id, page: () => FirstScreen()),
@@ -87,6 +87,11 @@ class MyApp extends StatelessWidget {
               page: () => const BottomAdminNavigationBar()),
           GetPage(name: Category.id, page: () => const Category()),
           GetPage(name: PetCategory.id, page: () => const PetCategory()),
+          GetPage(
+              name: AddMedicineScreen.id,
+              page: () => const AddMedicineScreen()),
+          GetPage(name: AddFoodScreen.id, page: () => const AddFoodScreen()),
+          GetPage(name: AddPetScreen.id, page: () => const AddPetScreen()),
         ],
       ),
       designSize: const Size(375, 812),

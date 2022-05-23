@@ -9,12 +9,14 @@ class CustomeTextFormField extends StatelessWidget {
     this.textController,
     required this.isObscure,
     required this.defaultControllerText,
+    this.keyboardType,
   }) : super(key: key);
   final String? Function(String?) validate;
   final TextEditingController? textController;
   final bool isObscure;
   final String? labelText;
   final String defaultControllerText;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class CustomeTextFormField extends StatelessWidget {
         ),
         style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
         validator: validate,
+        keyboardType: keyboardType,
       ),
     );
   }

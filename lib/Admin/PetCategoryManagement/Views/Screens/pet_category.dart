@@ -19,7 +19,7 @@ class PetCategory extends StatelessWidget {
                 ? FileImage(petScreenController.image!)
                 : const NetworkImage("null") as ImageProvider,
             isActiveText: petScreenController.isActive ? 'Active' : 'Inactive',
-            defaultControllerText: '',
+            defaultControllerText: petScreenController.titleController.text,
             textController: petScreenController.titleController,
             onPress: () {
               petScreenController.sendData();

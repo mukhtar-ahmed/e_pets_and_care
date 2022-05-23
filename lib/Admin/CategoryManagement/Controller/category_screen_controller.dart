@@ -14,17 +14,23 @@ class CategoryScreenController extends GetxController {
   late XFile photo;
   final formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   late bool isActive = false;
   CategoryScreenModel categoryScreenModel = CategoryScreenModel();
+  List<CategoryScreenModel> fil = [];
 
   @override
   void onInit() {
     super.onInit();
   }
 
-  bool updateActive(value) {
+  addFill(suggestions) {
+    fil = suggestions;
     update();
+  }
+
+  bool updateActive(value) {
     isActive = value;
     update();
     return isActive;
@@ -84,7 +90,12 @@ class CategoryScreenController extends GetxController {
 /*                                Edit Category                               */
 /* -------------------------------------------------------------------------- */
   void updateCategory(CategoryScreenModel index1) async {
+    // Get.snackbar('error1', titleController.text);
+    // Get.snackbar('error1', imageUrl);
+    // Get.snackbar('error2', isActive.toString());
+
     final fileName = basename(image!.path);
+    //Get.snackbar('error1', titleController.text);
     var storageImage = FirebaseStorage.instance.ref('category/$fileName');
     var task = storageImage.putFile(image!);
     imageUrl = await (await task).ref.getDownloadURL();

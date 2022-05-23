@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class PetCategoryScreen extends StatelessWidget {
@@ -17,6 +18,7 @@ class PetCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textfieldtext;
     return GetBuilder<PetCategoryScreenController>(
         init: PetCategoryScreenController(),
         builder: (petScreenController) {
@@ -54,20 +56,88 @@ class PetCategoryScreen extends StatelessWidget {
                             } else if (snapShort.hasData) {
                               final pet = snapShort.data!;
 
-                              return GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisSpacing: 20,
-                                          crossAxisSpacing: 10,
-                                          crossAxisCount: 2,
-                                          mainAxisExtent: 191),
-                                  itemCount: snapShort.data!.length,
-                                  itemBuilder: (BuildContext context, index) {
-                                    return buildPetContainer(
-                                        index1: snapShort.data![index]);
-                                  });
+                              return Column(
+                                children: [
+                                  /* -------------------------------------------------------------------------- */
+                                  /*                                Search Field                                */
+                                  /* -------------------------------------------------------------------------- */
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(
+                                        10, 15, 10, 10),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 3, 0, 3),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffEDF0F4),
+                                      // color: Colors.red,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                    ),
+                                    child: TextFormField(
+                                      controller:
+                                          petScreenController.searchController,
+                                      decoration: InputDecoration(
+                                        // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                                        hintText: 'Search',
+                                        border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                            icon: const Icon(
+                                                FontAwesomeIcons.xmark),
+                                            onPressed: () {}),
+                                      ),
+                                      onChanged: (String query) {
+                                        textfieldtext = petScreenController
+                                            .searchController.text
+                                            .trim();
+                                        final suggestions = snapShort.data!
+                                            .where((categoryfilter) {
+                                          final categoryTitle = categoryfilter
+                                              .petName!
+                                              .toLowerCase();
+                                          final input = query.toLowerCase();
+                                          return categoryTitle.contains(input);
+                                        }).toList();
+                                        petScreenController
+                                            .addFill(suggestions);
+                                        // setState(() {
+                                        //   addMedicineScreenController.fil =
+                                        //       suggestions;
+                                        // });
+                                      },
+                                    ),
+                                  ),
+
+                                  /* -------------------------------------------------------------------------- */
+                                  /*                              Search Field End                              */
+                                  /* -------------------------------------------------------------------------- */
+
+                                  GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: const ScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              mainAxisSpacing: 20,
+                                              crossAxisSpacing: 10,
+                                              crossAxisCount: 2,
+                                              mainAxisExtent: 191),
+                                      itemCount: petScreenController
+                                                  .searchController.text
+                                                  .trim() !=
+                                              ''
+                                          ? petScreenController.fil.length
+                                          : snapShort.data!.length,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return buildPetContainer(
+                                            index1: petScreenController
+                                                        .searchController.text
+                                                        .trim() !=
+                                                    ''
+                                                ? petScreenController.fil[index]
+                                                : snapShort.data![index]);
+                                      }),
+                                ],
+                              );
                             } else {
                               return const Center(child: CircleAvatar());
                             }

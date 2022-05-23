@@ -1,5 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:e_pets_and_care/Admin/Controller/bottom_admin_navigation_bar_controller.dart';
+import 'package:e_pets_and_care/Admin/Dashboard/Controller/bottom_admin_navigation_bar_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
