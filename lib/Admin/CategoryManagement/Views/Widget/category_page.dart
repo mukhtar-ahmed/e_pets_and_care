@@ -68,7 +68,7 @@ class CategoryPage extends StatelessWidget {
                               height: 50.h,
                             ),
                             Text(
-                              isActiveText,
+                              isActiveText, //'Active'
                               style: TextStyle(
                                   fontSize: 20.sp, fontWeight: FontWeight.w900),
                             ),
@@ -80,7 +80,7 @@ class CategoryPage extends StatelessWidget {
                               height: 35.h,
                               valueFontSize: 25.0,
                               toggleSize: 45.0,
-                              value: categoryScreenController.isActive,
+                              value: categoryScreenController.isActive, //false
                               onToggle: (val) {
                                 categoryScreenController.updateActive(val);
                               },

@@ -253,42 +253,6 @@ class SignInScreen extends StatelessWidget {
                                 /*                               SignIn Form End                              */
                                 /* -------------------------------------------------------------------------- */
                                 SizedBox(
-                                  height: 61.h,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Text(
-                                    'or continue with',
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 12.h,
-                                ),
-                                // ignore: prefer_const_literals_to_create_immutables
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  // ignore: prefer_const_literals_to_create_immutables
-                                  children: [
-                                    /* ----------------------- FaceBook Logo Button Start ----------------------- */
-                                    const Image(
-                                      image: AssetImage('images/fb.png'),
-                                    ),
-                                    /* ------------------------ FaceBook Logo Button End ------------------------ */
-                                    SizedBox(
-                                      width: 55.w,
-                                    ),
-                                    /* ------------------------- Gmail Logo Button Start ------------------------ */
-                                    const Image(
-                                      image: AssetImage('images/gmail.png'),
-                                    ),
-                                    /* -------------------------- Gmail Logo Button End ------------------------- */
-                                  ],
-                                ),
-                                SizedBox(
                                   height: 104.h,
                                 ),
                                 /* --------------------------- Registration Start --------------------------- */

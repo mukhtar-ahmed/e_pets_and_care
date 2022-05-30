@@ -283,28 +283,11 @@ class RegistrationScreen extends StatelessWidget {
                                                       ],
                                                     ),
                                                   ),
+
                                                   /* -------------------------- Confirm Password End -------------------------- */
-                                                  /* ----------------------------- CheckBox Start ----------------------------- */
-                                                  Row(
-                                                    children: [
-                                                      Checkbox(
-                                                          value:
-                                                              registrationScreenController
-                                                                  .isChecked
-                                                                  .value,
-                                                          activeColor:
-                                                              kPrimaryColor,
-                                                          onChanged:
-                                                              (bool? value) {
-                                                            registrationScreenController
-                                                                .cheacked(
-                                                                    value);
-                                                          }),
-                                                      const Text(
-                                                          'I agree with the rules')
-                                                    ],
+                                                  SizedBox(
+                                                    height: 30.h,
                                                   ),
-                                                  /* ------------------------------ CheckBox End ------------------------------ */
                                                   /* -------------------------- Register Button Start ------------------------- */
                                                   CustomeButton(
                                                     buttonColor: kPrimaryColor,
@@ -338,50 +321,7 @@ class RegistrationScreen extends StatelessWidget {
                                 /*                            Registration Form End                           */
                                 /* -------------------------------------------------------------------------- */
                                 SizedBox(
-                                  height: 30.h,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Text(
-                                    'or continue with',
-                                    style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w400),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  height: 12.h,
-                                ),
-                                // ignore: prefer_const_literals_to_create_immutables
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  // ignore: prefer_const_literals_to_create_immutables
-                                  children: [
-                                    /* ----------------------- FaceBook Logo Button Start ----------------------- */
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: const Image(
-                                        image: AssetImage('images/fb.png'),
-                                      ),
-                                    ),
-                                    /* ------------------------ FaceBook Logo Button End ------------------------ */
-                                    SizedBox(
-                                      width: 55.w,
-                                    ),
-                                    /* ------------------------- Gmail Logo Button Start ------------------------ */
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: const Image(
-                                        image: AssetImage('images/gmail.png'),
-                                      ),
-                                    ),
-                                    /* -------------------------- Gmail Logo Button End ------------------------- */
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 30.h,
+                                  height: 50.h,
                                 ),
                                 /* ------------------------------ Sign In Start ----------------------------- */
                                 Row(

@@ -18,9 +18,13 @@ class _BottomNavigationBarsState extends State<BottomNavigationBars> {
   int index = 1;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   final item = <Widget>[
-    const Icon(Icons.person, size: 30),
-    const Icon(Icons.home, size: 30),
-    const Icon(Icons.shopping_cart, size: 30),
+    const Icon(
+      Icons.person,
+      size: 30,
+      color: kWhiteColor,
+    ),
+    const Icon(Icons.home, size: 30, color: kWhiteColor),
+    const Icon(Icons.shopping_cart, size: 30, color: kWhiteColor),
   ];
   final screens = const [ProfileScreen(), HomeScreen(), CartScreen()];
 
@@ -30,7 +34,6 @@ class _BottomNavigationBarsState extends State<BottomNavigationBars> {
       child: Scaffold(
         extendBody: true,
         bottomNavigationBar: CurvedNavigationBar(
-          buttonBackgroundColor: Colors.purple,
           color: kPrimaryColor,
           backgroundColor: Colors.transparent,
           key: _bottomNavigationKey,

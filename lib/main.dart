@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: kPrimaryColor,
         ),
         // ignore: prefer_const_constructors
-        home: FirstScreen(),
+        home: HomeScreen(),
         getPages: [
           GetPage(
               name: EditProfileScreen.id,

@@ -71,45 +71,64 @@ class RegistrationFbGoogleScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                              HEADING TEXT END                              */
                     /* -------------------------------------------------------------------------- */
-                    SizedBox(
-                      height: 54.h,
-                    ),
-                    /* -------------------------------------------------------------------------- */
-                    /*                            FACEBOOK Button Start                           */
-                    /* -------------------------------------------------------------------------- */
-                    CustomeIconButton(
-                      icon: FontAwesomeIcons.facebook,
-                      text: 'Facebook',
-                      borderColor: kWhiteColor,
-                      buttonColor: kWhiteColor,
-                      textColor: kPrimaryColor,
-                      onPressed: () {},
-                    ),
-                    /* -------------------------------------------------------------------------- */
-                    /*                             FACEBOOK Button END                            */
-                    /* -------------------------------------------------------------------------- */
-                    SizedBox(
-                      height: 24.h,
-                    ),
-                    /* -------------------------------------------------------------------------- */
-                    /*                             GOOGLE Button Start                            */
-                    /* -------------------------------------------------------------------------- */
-                    CustomeIconButton(
-                      icon: FontAwesomeIcons.google,
-                      text: 'Google',
-                      borderColor: kWhiteColor,
-                      buttonColor: kWhiteColor,
-                      textColor: kPrimaryColor,
-                      onPressed: () {
-                        registrationFbGoogleScreenController
-                            .checkGoogleUserIsAuthenticated();
-                      },
-                    ),
-                    /* -------------------------------------------------------------------------- */
-                    /*                              GOOGLE Button END                             */
-                    /* -------------------------------------------------------------------------- */
+
                     SizedBox(
                       height: 48.h,
+                    ),
+                    /* -------------------------------------------------------------------------- */
+                    /*                                    Text                                    */
+                    /* -------------------------------------------------------------------------- */
+                    SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Caring for your pets has ',
+                            style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w800,
+                                color: kWhiteColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Text(
+                            'never been so easy!',
+                            style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w800,
+                                color: kWhiteColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Text(
+                            'With E-Pets & Care you can buy ',
+                            style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w800,
+                                color: kWhiteColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Text(
+                            'Pets , Food and Medicine',
+                            style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w800,
+                                color: kWhiteColor),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: 48.h,
+                          ),
+                        ],
+                      ),
                     ),
                     /* -------------------------------------------------------------------------- */
                     /*                             EMAIL BUTTON START                             */
