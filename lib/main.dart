@@ -6,11 +6,16 @@ import 'package:e_pets_and_care/Admin/Dashboard/Views/Screens/bottom_admin_navig
 import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/add_pet_screen.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
+import 'package:e_pets_and_care/view/screens/cart_screen.dart';
+import 'package:e_pets_and_care/view/screens/checkout_screen.dart';
 import 'package:e_pets_and_care/view/screens/edit_profile_screen.dart';
 import 'package:e_pets_and_care/view/screens/email_verification_screen.dart';
 import 'package:e_pets_and_care/view/screens/first_screen.dart';
+import 'package:e_pets_and_care/view/screens/food_details_screen.dart';
 import 'package:e_pets_and_care/view/screens/forgot_password_screen.dart';
 import 'package:e_pets_and_care/view/screens/home_screen.dart';
+import 'package:e_pets_and_care/view/screens/medicine_details_screen.dart';
+import 'package:e_pets_and_care/view/screens/pet_details_screen.dart';
 import 'package:e_pets_and_care/view/screens/registration_fb_google_screen.dart';
 import 'package:e_pets_and_care/view/screens/registration_screen.dart';
 import 'package:e_pets_and_care/view/screens/signin_screen.dart';
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: kPrimaryColor,
         ),
         // ignore: prefer_const_constructors
-        home: HomeScreen(),
+        home: FirstScreen(),
         getPages: [
           GetPage(
               name: EditProfileScreen.id,
@@ -77,6 +82,16 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: ForgotPasswordScreen.id,
               page: () => const ForgotPasswordScreen()),
+          GetPage(name: CartScreen.id, page: () => const CartScreen()),
+          GetPage(
+              name: MedicineDetailsScreen.id,
+              page: () => const MedicineDetailsScreen()),
+          GetPage(
+              name: FoodDetailsScreen.id,
+              page: () => const FoodDetailsScreen()),
+          GetPage(
+              name: PetDetailsScreen.id, page: () => const PetDetailsScreen()),
+          GetPage(name: CheckoutScreen.id, page: () => const CheckoutScreen()),
 
           /* -------------------------------------------------------------------------- */
           /*                              Admin Page Routes                             */

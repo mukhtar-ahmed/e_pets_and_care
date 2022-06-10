@@ -10,12 +10,13 @@ import 'package:e_pets_and_care/Admin/PetManagement/Controller/add_pet_screen_co
 import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
 import 'package:e_pets_and_care/Controller/home_screen_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
+import 'package:e_pets_and_care/view/screens/food_details_screen.dart';
+import 'package:e_pets_and_care/view/screens/medicine_details_screen.dart';
+import 'package:e_pets_and_care/view/screens/pet_details_screen.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,13 +24,6 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    AddMedicineScreenController addMedicineScreenController =
-        Get.put(AddMedicineScreenController());
-    AddPetScreenCotroller addPetScreenCotroller =
-        Get.put(AddPetScreenCotroller());
-    AddFoodScreenController addFoodScreenController =
-        Get.put(AddFoodScreenController());
-
     // ignore: prefer_const_constructors
     return GetBuilder<HomeScreenController>(
         init: HomeScreenController(),
@@ -140,9 +134,6 @@ class HomeScreen extends StatelessWidget {
                                                   snapshot.data![index]);
                                           homeScreenController
                                               .updateMainCategoryIndex(index);
-
-                                          print(homeScreenController
-                                              .mainCategoryIndex);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -337,8 +328,7 @@ class HomeScreen extends StatelessWidget {
                     homeScreenController.mainCategoryIndex == 0 ||
                             homeScreenController.mainCategoryIndex == -1
                         ? StreamBuilder<List<MedicineModel>>(
-                            stream: addMedicineScreenController
-                                .readMedicineCategory(),
+                            stream: homeScreenController.readMedicineCategory(),
                             builder: (context, snapShort) {
                               if (snapShort.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -389,8 +379,7 @@ class HomeScreen extends StatelessWidget {
                     homeScreenController.mainCategoryIndex == 1 ||
                             homeScreenController.mainCategoryIndex == -1
                         ? StreamBuilder<List<FoodModel>>(
-                            stream:
-                                addFoodScreenController.readMedicineCategory(),
+                            stream: homeScreenController.readFoodCategory(),
                             builder: (context, snapShort) {
                               if (snapShort.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -406,18 +395,8 @@ class HomeScreen extends StatelessWidget {
                                           mainAxisExtent: 200),
                                   itemCount: snapShort.data!.length,
                                   itemBuilder: (BuildContext context, index) {
-                                    if (snapShort.data![index].petCategory ==
-                                        homeScreenController
-                                            .petCategoryOnPressed) {
-                                      return buildFoodContainer(
-                                          index1: snapShort.data![index]);
-                                    } else if (snapShort
-                                            .data![index].petCategory ==
-                                        'cat') {
-                                      return Container();
-                                    } else {
-                                      return Container();
-                                    }
+                                    return buildFoodContainer(
+                                        index1: snapShort.data![index]);
                                   },
                                 );
                               } else {
@@ -451,7 +430,7 @@ class HomeScreen extends StatelessWidget {
                     homeScreenController.mainCategoryIndex == 2 ||
                             homeScreenController.mainCategoryIndex == -1
                         ? StreamBuilder<List<PetModel>>(
-                            stream: addPetScreenCotroller.readPetCategory(),
+                            stream: homeScreenController.readPet(),
                             builder: (context, snapShort) {
                               if (snapShort.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -511,12 +490,17 @@ class HomeScreen extends StatelessWidget {
             Column(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                SizedBox(
-                  height: 126.h,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      index1!.imageUrl.toString(),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(MedicineDetailsScreen.id, arguments: index1);
+                  },
+                  child: SizedBox(
+                    height: 126.h,
+                    child: Image(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        index1!.imageUrl.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -631,12 +615,17 @@ class HomeScreen extends StatelessWidget {
             Column(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                SizedBox(
-                  height: 126.h,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      index1!.imageUrl.toString(),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(PetDetailsScreen.id, arguments: index1);
+                  },
+                  child: SizedBox(
+                    height: 126.h,
+                    child: Image(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        index1!.imageUrl.toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -753,12 +742,17 @@ class HomeScreen extends StatelessWidget {
                   Column(
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      SizedBox(
-                        height: 126.h,
-                        child: Image(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            index1!.imageUrl.toString(),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(FoodDetailsScreen.id, arguments: index1);
+                        },
+                        child: SizedBox(
+                          height: 126.h,
+                          child: Image(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              index1.imageUrl.toString(),
+                            ),
                           ),
                         ),
                       ),

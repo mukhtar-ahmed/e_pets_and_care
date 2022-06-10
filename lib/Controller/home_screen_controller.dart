@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/Admin/CategoryManagement/Model/category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/FoodManagement/Model/food_model.dart';
+import 'package:e_pets_and_care/Admin/MedicineManagement/Model/medicine_model.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
 import 'package:e_pets_and_care/model/user_model.dart';
@@ -21,6 +24,9 @@ class HomeScreenController extends GetxController {
   int mainCategoryIndex = -1;
   int petCategoryIndex = -1;
   List<FoodModel> foodData = [];
+  bool isPetCategory = false;
+  int quantity = 0;
+  
 
   void updateMainCategoryIndex(index) {
     mainCategoryIndex = index;
@@ -29,7 +35,68 @@ class HomeScreenController extends GetxController {
 
   void updatePetCategoryIndex(index) {
     petCategoryIndex = index;
+    isPetCategory = true;
     update();
+  }
+
+/* -------------------------------------------------------------------------- */
+/*                  Read Food Category for Field petCategory                  */
+/* -------------------------------------------------------------------------- */
+  Stream<List<FoodModel>> readFoodCategory() {
+    if (isPetCategory == true && petCategoryOnPressed != '') {
+      return FirebaseFirestore.instance
+          .collection('food')
+          .where('petCategory', isEqualTo: petCategoryOnPressed)
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((doc) => FoodModel.fromMap(doc.data()))
+              .toList());
+    } else {
+      return FirebaseFirestore.instance.collection('food').snapshots().map(
+          (snapshots) => snapshots.docs
+              .map((doc) => FoodModel.fromMap(doc.data()))
+              .toList());
+    }
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                Read Medicine Category for Field petCategory                */
+  /* -------------------------------------------------------------------------- */
+  Stream<List<MedicineModel>> readMedicineCategory() {
+    if (isPetCategory == true && petCategoryOnPressed != '') {
+      return FirebaseFirestore.instance
+          .collection('medicine')
+          .where('petCategory', isEqualTo: petCategoryOnPressed)
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((doc) => MedicineModel.fromMap(doc.data()))
+              .toList());
+    } else {
+      return FirebaseFirestore.instance.collection('medicine').snapshots().map(
+          (snapshots) => snapshots.docs
+              .map((doc) => MedicineModel.fromMap(doc.data()))
+              .toList());
+    }
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                   Read Pet  for Field petCategory                  */
+  /* -------------------------------------------------------------------------- */
+  Stream<List<PetModel>> readPet() {
+    if (isPetCategory == true && petCategoryOnPressed != '') {
+      return FirebaseFirestore.instance
+          .collection('pet')
+          .where('petCategory', isEqualTo: petCategoryOnPressed)
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((doc) => PetModel.fromMap(doc.data()))
+              .toList());
+    } else {
+      return FirebaseFirestore.instance.collection('pet').snapshots().map(
+          (snapshots) => snapshots.docs
+              .map((doc) => PetModel.fromMap(doc.data()))
+              .toList());
+    }
   }
 
   @override

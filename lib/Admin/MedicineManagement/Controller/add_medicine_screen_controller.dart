@@ -31,7 +31,6 @@ class AddMedicineScreenController extends GetxController {
   var index;
   List<DropdownMenuItem<dynamic>>? categoryIten = [];
   MedicineModel medicineModel = MedicineModel();
-  
 
   addFill(suggestions) {
     fil = suggestions;
@@ -55,11 +54,12 @@ class AddMedicineScreenController extends GetxController {
 /* -------------------------------------------------------------------------- */
 /*                        Medicine Collection Read Data                       */
 /* -------------------------------------------------------------------------- */
-  Stream<List<MedicineModel>> readMedicineCategory() =>
-      FirebaseFirestore.instance.collection('medicine').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => MedicineModel.fromMap(doc.data()))
-              .toList());
+  Stream<List<MedicineModel>> readMedicineCategory() {
+    return FirebaseFirestore.instance.collection('medicine').snapshots().map(
+        (snapshots) => snapshots.docs
+            .map((doc) => MedicineModel.fromMap(doc.data()))
+            .toList());
+  }
 
 /* -------------------------------------------------------------------------- */
 /*                             Update Active Value                            */

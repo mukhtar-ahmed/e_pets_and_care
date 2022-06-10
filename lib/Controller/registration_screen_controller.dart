@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/model/user_model.dart';
+import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
 import 'package:e_pets_and_care/view/screens/email_verification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,8 @@ class RegistrationScreenController extends GetxController {
     userModel.uid = user!.uid;
     userModel.fullName = registrationScreenController.nameController.text;
     userModel.email = user.email;
-    Get.toNamed(EmailVerificationScreen.id);
+    userModel.role = 'user';
+    Get.toNamed(BottomNavigationBars.id);
 
     await registrationScreenController.firebaseFirestore
         .collection('users')
@@ -68,6 +70,6 @@ class RegistrationScreenController extends GetxController {
         .set(userModel.toMap());
 
     Get.snackbar('SignUp', 'SignUp Successfully');
-    Get.toNamed(EmailVerificationScreen.id);
+    //Get.toNamed(EmailVerificationScreen.id);
   }
 }
