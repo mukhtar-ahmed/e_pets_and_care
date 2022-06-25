@@ -1,6 +1,8 @@
 import 'package:e_pets_and_care/Controller/checkout_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
+import 'package:e_pets_and_care/view/widget/custome_button.dart';
+import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -40,6 +42,101 @@ class CheckoutScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
               child: Column(
                 children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(20.r)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: kPrimaryColor,
+                              ),
+                              const Text('Shipping Address'),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.bottomSheet(
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: kWhiteColor,
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20.r),
+                                            topLeft: Radius.circular(20.r)),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20.w),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 30.h,
+                                            ),
+                                            Text(
+                                              'Address',
+                                              style: TextStyle(
+                                                  fontSize: 25.sp,
+                                                  fontWeight: FontWeight.w900),
+                                            ),
+                                            CustomeTextFieldLabel(
+                                              labelText: 'Enter Address',
+                                              textAlign: TextAlign.start,
+                                              fontSized: 14.sp,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            TextFormField(
+                                              maxLines: 3,
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder()),
+                                            ),
+                                            SizedBox(
+                                              height: 17.h,
+                                            ),
+                                            CustomeButton(
+                                              buttonColor: Colors.orange,
+                                              fontColor: Colors.white,
+                                              buttonText: 'Sava',
+                                              horPadding: 15,
+                                              onPressed: () {},
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Edit Address',
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 20.sp),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            child: Text('abc.abc'),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
                   /* -------------------------------------------------------------------------- */
                   /*                              Bag Summary Start                             */
                   /* -------------------------------------------------------------------------- */

@@ -1,14 +1,14 @@
 class MedicineModel {
-  bool? active;
   String? medicineName;
   String? imageUrl;
   int? medicinePrice;
+  int? quantity;
   String? petCategory;
   String? medicineDescription;
   String? medicineId;
 
   MedicineModel(
-      {this.active,
+      {this.quantity,
       this.medicineName,
       this.imageUrl,
       this.medicinePrice,
@@ -19,7 +19,7 @@ class MedicineModel {
 //Receving from server
   static MedicineModel fromMap(Map<String, dynamic> json) {
     return MedicineModel(
-        active: json['active'],
+        quantity: json['quantity'],
         medicineName: json['medicineName'],
         imageUrl: json['imageUrl'],
         medicinePrice: json['medicinePrice'],
@@ -31,7 +31,7 @@ class MedicineModel {
 //Sending to server
   Map<String, dynamic> toMap() {
     return {
-      'active': active,
+      'quantity': quantity,
       'medicineName': medicineName,
       'imageUrl': imageUrl,
       'medicinePrice': medicinePrice,

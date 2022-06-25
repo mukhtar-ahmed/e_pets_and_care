@@ -1,4 +1,5 @@
 import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,14 +9,13 @@ import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_s
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddPetScreenCotroller extends GetxController
-{
+class PetScreenCotroller extends GetxController {
   final formKey = GlobalKey<FormState>();
   TextEditingController petNameController = TextEditingController();
   TextEditingController petPriceController = TextEditingController();
   TextEditingController petQuantityController = TextEditingController();
   TextEditingController petDescriptionController = TextEditingController();
-  
+
   late XFile photo;
   File? image;
   late String imageUrl;
@@ -26,15 +26,14 @@ class AddPetScreenCotroller extends GetxController
   var selectedCategory;
   var index;
   List<DropdownMenuItem<dynamic>>? categoryIten = [];
-  PetModel petModel = PetModel();
+  StockModel stockModel = StockModel();
   TextEditingController searchController = TextEditingController();
-  List<PetModel> fil = [];
+  List<StockModel> fil = [];
 
   addFill(suggestions) {
     fil = suggestions;
     update();
   }
-
 
   updateMenuValue(value) {
     selectedCategory = value;
@@ -50,7 +49,6 @@ class AddPetScreenCotroller extends GetxController
               .map((doc) => PetCategoryScreenModel.fromMap(doc.data()))
               .toList());
 
-  
 /* -------------------------------------------------------------------------- */
 /*                          Select Image From Gallery                         */
 /* -------------------------------------------------------------------------- */
@@ -65,22 +63,21 @@ class AddPetScreenCotroller extends GetxController
     update();
   }
 
-
- /* -------------------------------------------------------------------------- */
- /*                          Pet Collection Read Data                          */
- /* -------------------------------------------------------------------------- */
-  Stream<List<PetModel>> readPetCategory() =>
-      FirebaseFirestore.instance.collection('pet').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => PetModel.fromMap(doc.data()))
-              .toList());
+  /* -------------------------------------------------------------------------- */
+  /*                          Pet Collection Read Data                          */
+  /* -------------------------------------------------------------------------- */
+  Stream<List<StockModel>> readPetCategory() => FirebaseFirestore.instance
+      .collection('stock')
+      .where('itemCategory', isEqualTo: 'pet')
+      .snapshots()
+      .map((snapshots) =>
+          snapshots.docs.map((doc) => StockModel.fromMap(doc.data())).toList());
 
 /* -------------------------------------------------------------------------- */
 /*                                   Delete                                   */
 /* -------------------------------------------------------------------------- */
-  void deletePet(PetModel index1) async {
-    final pet =
-        firebaseFirestore.collection("pet").doc(index1.petId);
+  void deletePet(StockModel index1) async {
+    final pet = firebaseFirestore.collection("stock").doc(index1.itemId);
     pet.delete();
     update();
   }
@@ -88,23 +85,23 @@ class AddPetScreenCotroller extends GetxController
   /* -------------------------------------------------------------------------- */
   /*                               Update Pet                              */
   /* -------------------------------------------------------------------------- */
-  void updateCategory(PetModel index1) async {
+  void updateCategory(StockModel index1) async {
     final fileName = basename(image!.path);
-    var storageImage = FirebaseStorage.instance.ref('pet/$fileName');
+    var storageImage = FirebaseStorage.instance.ref('stock/pet/$fileName');
     var task = storageImage.putFile(image!);
     imageUrl = await (await task).ref.getDownloadURL();
     // final category = firebaseFirestore.collection("category").doc('uid');
-    final pet =
-        firebaseFirestore.collection("pet").doc(index1.petId);
-    
-    petModel.petName = petNameController.text;
-    petModel.imageUrl = imageUrl;
-    petModel.petPrice = int.parse(petPriceController.text);
-    petModel.quantity = int.parse(petQuantityController.text);
-    petModel.petCategory = selectedCategory;
-    petModel.petDescription = petDescriptionController.text;
+    final pet = firebaseFirestore.collection("stock").doc(index1.itemId);
 
-    await pet.update(petModel.toMap());
+    stockModel.itemName = petNameController.text;
+    stockModel.itemImageUrl = imageUrl;
+    stockModel.itemPrice = int.parse(petPriceController.text);
+    stockModel.itemQuantity = int.parse(petQuantityController.text);
+    stockModel.petCategory = selectedCategory;
+    stockModel.itemCategory = 'pet';
+    stockModel.itemDescription = petDescriptionController.text;
+
+    await pet.update(stockModel.toMap());
 
     // category.update({
     //   'title': titleController.text,
@@ -113,31 +110,32 @@ class AddPetScreenCotroller extends GetxController
     // });
     update();
   }
-  
+
 /* -------------------------------------------------------------------------- */
 /*                           Send data to firestore                           */
 /* -------------------------------------------------------------------------- */
   sendData() async {
     if ((formKey.currentState!.validate()) || image != null) {
       final fileName = basename(image!.path);
-      var storageImage = FirebaseStorage.instance.ref('pet/$fileName');
+      var storageImage = FirebaseStorage.instance.ref('stock/pet/$fileName');
       var task = storageImage.putFile(image!);
       imageUrl = await (await task).ref.getDownloadURL();
 
-      final docRef = FirebaseFirestore.instance.collection("pet").doc();
+      final docRef = FirebaseFirestore.instance.collection("stock").doc();
 
-      petModel.petName = petNameController.text;
-      petModel.imageUrl = imageUrl;
-      petModel.petPrice = int.parse(petPriceController.text);
-      petModel.quantity = int.parse(petQuantityController.text);
-      petModel.petCategory = selectedCategory;
-      petModel.petDescription = petDescriptionController.text;
-      petModel.petId = docRef.id;
+      stockModel.itemName = petNameController.text;
+      stockModel.itemImageUrl = imageUrl;
+      stockModel.itemPrice = int.parse(petPriceController.text);
+      stockModel.itemQuantity = int.parse(petQuantityController.text);
+      stockModel.petCategory = selectedCategory;
+      stockModel.itemCategory = 'pet';
+      stockModel.itemDescription = petDescriptionController.text;
+      stockModel.itemId = docRef.id;
 
       await firebaseFirestore
-          .collection('pet')
+          .collection('stock')
           .doc(docRef.id)
-          .set(petModel.toMap());
+          .set(stockModel.toMap());
       formKey.currentState!.reset();
       image = null;
       petNameController.clear();
@@ -149,6 +147,4 @@ class AddPetScreenCotroller extends GetxController
       Get.snackbar('Error', 'Image Missing');
     }
   }
-
-  
 }

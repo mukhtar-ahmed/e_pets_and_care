@@ -1,7 +1,9 @@
 import 'package:e_pets_and_care/Admin/FoodManagement/Controller/add_food_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/FoodManagement/Controller/food_screen_controller.dart';
 import 'package:e_pets_and_care/Admin/FoodManagement/Model/food_model.dart';
 import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/add_food_screen.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
@@ -16,8 +18,7 @@ import 'package:get/get.dart';
 class FoodScreen extends StatelessWidget {
   static const String id = '/food_screen';
   FoodScreen({Key? key}) : super(key: key);
-  AddFoodScreenController addFoodScreenController =
-      Get.put(AddFoodScreenController());
+  FoodScreenController foodScreenController = Get.put(FoodScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +59,95 @@ class FoodScreen extends StatelessWidget {
               },
             ),
           ]),
-      body: GetBuilder<AddFoodScreenController>(
-          init: AddFoodScreenController(),
-          builder: (addFoodScreenController) {
+      body: GetBuilder<FoodScreenController>(
+          init: FoodScreenController(),
+          builder: (foodScreenController) {
+            var streamBuilder = StreamBuilder<List<StockModel>>(
+                stream: foodScreenController.readFoodCategory(),
+                builder: (context, snapShort) {
+                  if (snapShort.hasError) {
+                    return const Text('Some Thing Wrong');
+                  } else if (snapShort.hasData) {
+                    final pet = snapShort.data!;
+
+                    return Column(
+                      children: [
+                        /* -------------------------------------------------------------------------- */
+                        /*                                Search Field                                */
+                        /* -------------------------------------------------------------------------- */
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                          padding: const EdgeInsets.fromLTRB(15, 3, 0, 3),
+                          decoration: const BoxDecoration(
+                            color: Color(0xffEDF0F4),
+                            // color: Colors.red,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: TextFormField(
+                            controller: foodScreenController.searchController,
+                            decoration: InputDecoration(
+                              // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                              hintText: 'Search',
+                              border: InputBorder.none,
+                              suffixIcon: IconButton(
+                                  icon: const Icon(FontAwesomeIcons.xmark),
+                                  onPressed: () {}),
+                            ),
+                            onChanged: (String query) {
+                              textfieldtext = foodScreenController
+                                  .searchController.text
+                                  .trim();
+                              final suggestions =
+                                  snapShort.data!.where((categoryfilter) {
+                                final categoryTitle =
+                                    categoryfilter.itemName!.toLowerCase();
+                                final input = query.toLowerCase();
+                                return categoryTitle.contains(input);
+                              }).toList();
+                              foodScreenController.addFill(suggestions);
+                              // setState(() {
+                              //   addMedicineScreenController.fil =
+                              //       suggestions;
+                              // });
+                            },
+                          ),
+                        ),
+
+                        /* -------------------------------------------------------------------------- */
+                        /*                              Search Field End                              */
+                        /* -------------------------------------------------------------------------- */
+                        GridView.builder(
+                            shrinkWrap: true,
+                            physics: const ScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 0,
+                                    crossAxisCount: 2,
+                                    mainAxisExtent: 296),
+                            itemCount: foodScreenController
+                                        .searchController.text
+                                        .trim() !=
+                                    ''
+                                ? foodScreenController.fil.length
+                                : snapShort.data!.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return buildFoodContainer(
+                                  index1: foodScreenController
+                                              .searchController.text
+                                              .trim() !=
+                                          ''
+                                      ? foodScreenController.fil[index]
+                                      : snapShort.data![index]);
+                            }),
+                      ],
+                    );
+                  } else {
+                    return const Center(child: CircleAvatar());
+                  }
+                });
             return SingleChildScrollView(
               child: Center(
                 child: SizedBox(
@@ -71,102 +158,9 @@ class FoodScreen extends StatelessWidget {
                         height: 10.h,
                       ),
                       /* -------------------------------------------------------------------------- */
-                      /*                         Medicine Display Container                         */
+                      /*                         Food Display Container                         */
                       /* -------------------------------------------------------------------------- */
-                      StreamBuilder<List<FoodModel>>(
-                          stream:
-                              addFoodScreenController.readMedicineCategory(),
-                          builder: (context, snapShort) {
-                            if (snapShort.hasError) {
-                              return const Text('Some Thing Wrong');
-                            } else if (snapShort.hasData) {
-                              return Column(
-                                children: [
-                                  /* -------------------------------------------------------------------------- */
-                                  /*                                Search Field                                */
-                                  /* -------------------------------------------------------------------------- */
-                                  Container(
-                                    margin: const EdgeInsets.fromLTRB(
-                                        10, 15, 10, 10),
-                                    padding:
-                                        const EdgeInsets.fromLTRB(15, 3, 0, 3),
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xffEDF0F4),
-                                      // color: Colors.red,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: TextFormField(
-                                      controller: addFoodScreenController
-                                          .searchController,
-                                      decoration: InputDecoration(
-                                        // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
-                                        hintText: 'Search',
-                                        border: InputBorder.none,
-                                        suffixIcon: IconButton(
-                                            icon: const Icon(
-                                                FontAwesomeIcons.xmark),
-                                            onPressed: () {}),
-                                      ),
-                                      onChanged: (String query) {
-                                        textfieldtext = addFoodScreenController
-                                            .searchController.text
-                                            .trim();
-                                        final suggestions = snapShort.data!
-                                            .where((categoryfilter) {
-                                          final categoryTitle = categoryfilter
-                                              .foodName!
-                                              .toLowerCase();
-                                          final input = query.toLowerCase();
-                                          return categoryTitle.contains(input);
-                                        }).toList();
-                                        addFoodScreenController
-                                            .addFill(suggestions);
-                                        // setState(() {
-                                        //   addMedicineScreenController.fil =
-                                        //       suggestions;
-                                        // });
-                                      },
-                                    ),
-                                  ),
-
-                                  /* -------------------------------------------------------------------------- */
-                                  /*                              Search Field End                              */
-                                  /* -------------------------------------------------------------------------- */
-
-                                  GridView.builder(
-                                      shrinkWrap: true,
-                                      physics: const ScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              mainAxisSpacing: 10,
-                                              crossAxisSpacing: 0,
-                                              crossAxisCount: 2,
-                                              mainAxisExtent: 296),
-                                      itemCount: addFoodScreenController
-                                                  .searchController.text
-                                                  .trim() !=
-                                              ''
-                                          ? addFoodScreenController.fil.length
-                                          : snapShort.data!.length,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        return buildMedicineContainer(
-                                            index1: addFoodScreenController
-                                                        .searchController.text
-                                                        .trim() !=
-                                                    ''
-                                                ? addFoodScreenController
-                                                    .fil[index]
-                                                : snapShort.data![index]);
-                                      }),
-                                ],
-                              );
-                            } else {
-                              return const Center(child: CircleAvatar());
-                            }
-                          }),
+                      streamBuilder,
                     ],
                   ),
                 ),
@@ -176,7 +170,7 @@ class FoodScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMedicineContainer({FoodModel? index1}) {
+  Widget buildFoodContainer({StockModel? index1}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       child: Container(
@@ -203,7 +197,7 @@ class FoodScreen extends StatelessWidget {
                   child: Image(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      index1!.imageUrl.toString(),
+                      index1!.itemImageUrl.toString(),
                     ),
                   ),
                 ),
@@ -220,9 +214,9 @@ class FoodScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /* ----------------------------- Name Of Medicine ---------------------------- */
+                      /* ----------------------------- Name Of Food ---------------------------- */
                       CustomeTextFieldLabel(
-                        labelText: index1.foodName.toString(),
+                        labelText: index1.itemName.toString(),
                         textAlign: TextAlign.start,
                         fontSized: 14.sp,
                         color: Colors.black,
@@ -231,11 +225,11 @@ class FoodScreen extends StatelessWidget {
                       SizedBox(
                         height: 4.h,
                       ),
-                      /* -------------------------- Medicine Description -------------------------- */
+                      /* -------------------------- Food Description -------------------------- */
                       // ignore: prefer_const_constructors
                       Flexible(
                         child: Text(
-                          index1.foodDescription.toString(),
+                          index1.itemDescription.toString(),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -247,16 +241,18 @@ class FoodScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'RS: ${index1.foodPrice}',
+                            'RS: ${index1.itemPrice}',
                             style: TextStyle(
                                 fontSize: 18.sp, fontWeight: FontWeight.w900),
                           ),
                           Container(
+                            alignment: Alignment.center,
                             width: 50.w,
                             height: 28.h,
-                            child: Icon(Icons.circle,
-                                color:
-                                    index1.active! ? Colors.green : Colors.red),
+                            child: Text(
+                              index1.itemQuantity.toString(),
+                              style: TextStyle(fontSize: 20.sp),
+                            ),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(5)),
@@ -273,7 +269,7 @@ class FoodScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          addFoodScreenController.deleteFood(index1);
+                          foodScreenController.deleteFood(index1);
                         },
                         child: SizedBox(
                           width: 73.w,
@@ -294,9 +290,9 @@ class FoodScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.bottomSheet(
-                            GetBuilder<AddFoodScreenController>(
-                                init: AddFoodScreenController(),
-                                builder: (addFoodScreenController) {
+                            GetBuilder<FoodScreenController>(
+                                init: FoodScreenController(),
+                                builder: (foodScreenController) {
                                   return SingleChildScrollView(
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -306,9 +302,9 @@ class FoodScreen extends StatelessWidget {
                                           topRight: Radius.circular(20.r),
                                         ),
                                       ),
-                                      height: 720.h,
+                                      height: 780.h,
                                       child: Form(
-                                        key: addFoodScreenController.formKey,
+                                        key: foodScreenController.formKey,
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 25.w),
@@ -317,34 +313,18 @@ class FoodScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 10.h,
                                               ),
-                                              /* ------------------------- Edit Medicine & Active ------------------------- */
+                                              /* ------------------------- Edit Food & Active ------------------------- */
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
                                                   Text(
-                                                    'Edit Medicine',
+                                                    'Edit Food',
                                                     style: TextStyle(
                                                         fontSize: 20.sp,
                                                         fontWeight:
                                                             FontWeight.w900),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 8.w,
-                                                  ),
-                                                  FlutterSwitch(
-                                                    width: 100.w,
-                                                    height: 35.h,
-                                                    valueFontSize: 25.0,
-                                                    toggleSize: 45.0,
-                                                    value: index1.active!,
-                                                    onToggle: (val) {
-                                                      index1.active =
-                                                          addFoodScreenController
-                                                              .updateActive(
-                                                                  val);
-                                                    },
                                                   ),
                                                 ],
                                               ),
@@ -352,27 +332,27 @@ class FoodScreen extends StatelessWidget {
                                                 height: 10.h,
                                               ),
 
-                                              /* ---------------------------- Medicine Picture --------------------------- */
+                                              /* ---------------------------- Food Picture --------------------------- */
                                               CircleAvatar(
                                                 radius: 100.r,
                                                 backgroundImage:
-                                                    addFoodScreenController
+                                                    foodScreenController
                                                                 .image !=
                                                             null
                                                         ? FileImage(
-                                                                addFoodScreenController
+                                                                foodScreenController
                                                                     .image!)
                                                             as ImageProvider
                                                         : NetworkImage(
-                                                            index1.imageUrl!,
+                                                            index1
+                                                                .itemImageUrl!,
                                                           ),
                                                 // ignore: prefer_const_literals_to_create_immutables
                                                 child: Stack(children: [
                                                   // ignore: prefer_const_constructors
                                                   GestureDetector(
-                                                    onTap:
-                                                        addFoodScreenController
-                                                            .selectFile,
+                                                    onTap: foodScreenController
+                                                        .selectFile,
                                                     child: Align(
                                                       alignment:
                                                           Alignment.bottomRight,
@@ -392,14 +372,13 @@ class FoodScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 20.h,
                                               ),
-                                              /* -------------------------- Title / Medicine Name ------------------------- */
+                                              /* -------------------------- Title / Food Name ------------------------- */
                                               SizedBox(
                                                 height: 60.h,
                                                 child: Column(
                                                   children: [
                                                     CustomeTextFieldLabel(
-                                                      labelText:
-                                                          "Medicine Name",
+                                                      labelText: "Food Name",
                                                       textAlign:
                                                           TextAlign.start,
                                                       fontSized: 14.sp,
@@ -413,9 +392,9 @@ class FoodScreen extends StatelessWidget {
                                                     CustomeTextFormField(
                                                       //labelText: index1.title,
                                                       defaultControllerText:
-                                                          index1.foodName!,
+                                                          index1.itemName!,
                                                       textController:
-                                                          addFoodScreenController
+                                                          foodScreenController
                                                               .foodNameController,
                                                       isObscure: false,
                                                       validate: (value) {
@@ -438,7 +417,7 @@ class FoodScreen extends StatelessWidget {
                                                 height: 20.h,
                                               ),
                                               /* -------------------------------------------------------------------------- */
-                                              /*                               Medicine Price                               */
+                                              /*                               Food Price                               */
                                               /* -------------------------------------------------------------------------- */
                                               CustomeTextFieldLabel(
                                                 labelText: "Food Price",
@@ -454,9 +433,9 @@ class FoodScreen extends StatelessWidget {
                                                 keyboardType:
                                                     TextInputType.number,
                                                 defaultControllerText:
-                                                    index1.foodPrice.toString(),
+                                                    index1.itemPrice.toString(),
                                                 textController:
-                                                    addFoodScreenController
+                                                    foodScreenController
                                                         .foodPriceController,
                                                 isObscure: false,
                                                 validate: (value) {
@@ -465,6 +444,42 @@ class FoodScreen extends StatelessWidget {
                                                   } else if (int.parse(value) <
                                                       0) {
                                                     return 'Price must be Greater than 0';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
+                                              /* -------------------------------------------------------------------------- */
+                                              /*                               Total Quantity                               */
+                                              /* -------------------------------------------------------------------------- */
+                                              CustomeTextFieldLabel(
+                                                labelText: "Food Quantity",
+                                                textAlign: TextAlign.start,
+                                                fontSized: 14.sp,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              SizedBox(
+                                                height: 6.h,
+                                              ),
+                                              CustomeTextFormField(
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                defaultControllerText: index1
+                                                    .itemQuantity
+                                                    .toString(),
+                                                textController:
+                                                    foodScreenController
+                                                        .foodQuantityController,
+                                                isObscure: false,
+                                                validate: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Please enter the Quantity';
+                                                  } else if (int.parse(value) <
+                                                      0) {
+                                                    return 'Quantity must be Greater than 0';
                                                   }
                                                   return null;
                                                 },
@@ -487,7 +502,7 @@ class FoodScreen extends StatelessWidget {
                                               ),
                                               StreamBuilder<
                                                   List<PetCategoryScreenModel>>(
-                                                stream: addFoodScreenController
+                                                stream: foodScreenController
                                                     .readCategory(),
                                                 builder: (context, snapshot) {
                                                   if (!snapshot.hasData) {
@@ -496,7 +511,7 @@ class FoodScreen extends StatelessWidget {
                                                           CupertinoActivityIndicator(),
                                                     );
                                                   } else if (snapshot.hasData) {
-                                                    addFoodScreenController
+                                                    foodScreenController
                                                         .categoryIten!
                                                         .clear();
                                                     for (int i = 0;
@@ -504,21 +519,21 @@ class FoodScreen extends StatelessWidget {
                                                             snapshot
                                                                 .data!.length;
                                                         i++) {
-                                                      addFoodScreenController
+                                                      foodScreenController
                                                               .index =
                                                           snapshot.data![i];
 
-                                                      addFoodScreenController
+                                                      foodScreenController
                                                           .categoryIten!
                                                           .add(
                                                         DropdownMenuItem(
                                                           child: Text(
-                                                            addFoodScreenController
+                                                            foodScreenController
                                                                 .index.petName
                                                                 .toString(),
                                                           ),
                                                           value:
-                                                              addFoodScreenController
+                                                              foodScreenController
                                                                   .index.petName
                                                                   .toString(),
                                                         ),
@@ -527,13 +542,12 @@ class FoodScreen extends StatelessWidget {
                                                   }
                                                   return DropdownButtonFormField<
                                                       dynamic>(
-                                                    items:
-                                                        addFoodScreenController
-                                                            .categoryIten,
+                                                    items: foodScreenController
+                                                        .categoryIten,
                                                     onChanged: (categoryValue) {
                                                       Get.snackbar('Error',
                                                           categoryValue);
-                                                      addFoodScreenController
+                                                      foodScreenController
                                                           .updateMenuValue(
                                                               categoryValue);
                                                     },
@@ -551,10 +565,9 @@ class FoodScreen extends StatelessWidget {
                                               SizedBox(
                                                 height: 20.h,
                                               ),
-                                              /* ---------------------------- Descrition of Medicine --------------------------- */
+                                              /* ---------------------------- Descrition of FOOD --------------------------- */
                                               CustomeTextFieldLabel(
-                                                labelText:
-                                                    "Medicine Description",
+                                                labelText: "Food Description",
                                                 textAlign: TextAlign.start,
                                                 fontSized: 14.sp,
                                                 color: Colors.black,
@@ -564,11 +577,10 @@ class FoodScreen extends StatelessWidget {
                                                 height: 6.h,
                                               ),
                                               TextFormField(
-                                                controller:
-                                                    addFoodScreenController
-                                                        .foodDescriptionController
-                                                      ..text = index1
-                                                          .foodDescription!,
+                                                controller: foodScreenController
+                                                    .foodDescriptionController
+                                                  ..text =
+                                                      index1.itemDescription!,
                                                 maxLines: 3,
                                                 validator: (value) {
                                                   if (value != null &&
@@ -596,7 +608,7 @@ class FoodScreen extends StatelessWidget {
                                                 horPadding: 50,
                                                 onPressed: () {
                                                   Get.back();
-                                                  addFoodScreenController
+                                                  foodScreenController
                                                       .updateCategory(index1);
                                                 },
                                               ),

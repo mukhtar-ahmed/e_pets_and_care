@@ -1,4 +1,5 @@
 import 'package:e_pets_and_care/Admin/MedicineManagement/Controller/add_medicine_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/MedicineManagement/Controller/medicine_screen_controller.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
@@ -15,9 +16,9 @@ class AddMedicineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AddMedicineScreenController>(
-        init: AddMedicineScreenController(),
-        builder: (addMedicineScreenController) {
+    return GetBuilder<MedicineScreenController>(
+        init: MedicineScreenController(),
+        builder: (medicineScreenController) {
           return Scaffold(
               appBar: AppBar(
                 // ignore: prefer_const_constructors
@@ -38,7 +39,7 @@ class AddMedicineScreen extends StatelessWidget {
                   ),
                   height: 812.h,
                   child: Form(
-                    key: addMedicineScreenController.formKey,
+                    key: medicineScreenController.formKey,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.w),
                       child: Column(
@@ -53,27 +54,6 @@ class AddMedicineScreen extends StatelessWidget {
                               SizedBox(
                                 height: 50.h,
                               ),
-                              Text(
-                                addMedicineScreenController.isActive
-                                    ? 'Active'
-                                    : 'Inactive',
-                                style: TextStyle(
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w900),
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              FlutterSwitch(
-                                width: 100.w,
-                                height: 35.h,
-                                valueFontSize: 25.0,
-                                toggleSize: 45.0,
-                                value: addMedicineScreenController.isActive,
-                                onToggle: (val) {
-                                  addMedicineScreenController.updateActive(val);
-                                },
-                              ),
                             ],
                           ),
                           SizedBox(
@@ -84,16 +64,15 @@ class AddMedicineScreen extends StatelessWidget {
                           CircleAvatar(
                             radius: 80.r,
                             // ignore: unnecessary_cast
-                            backgroundImage: addMedicineScreenController
-                                        .image !=
+                            backgroundImage: medicineScreenController.image !=
                                     null
-                                ? FileImage(addMedicineScreenController.image!)
+                                ? FileImage(medicineScreenController.image!)
                                 : const NetworkImage("null") as ImageProvider,
                             // ignore: prefer_const_literals_to_create_immutables
                             child: Stack(children: [
                               // ignore: prefer_const_constructors
                               GestureDetector(
-                                onTap: addMedicineScreenController.selectFile,
+                                onTap: medicineScreenController.selectFile,
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: CircleAvatar(
@@ -125,10 +104,10 @@ class AddMedicineScreen extends StatelessWidget {
                             height: 6.h,
                           ),
                           CustomeTextFormField(
-                            defaultControllerText: addMedicineScreenController
+                            defaultControllerText: medicineScreenController
                                 .medicineNameController.text,
-                            textController: addMedicineScreenController
-                                .medicineNameController,
+                            textController:
+                                medicineScreenController.medicineNameController,
                             isObscure: false,
                             validate: (value) {
                               if (value != null && value.isNotEmpty) {
@@ -159,10 +138,42 @@ class AddMedicineScreen extends StatelessWidget {
                           ),
                           CustomeTextFormField(
                             keyboardType: TextInputType.number,
-                            defaultControllerText: addMedicineScreenController
+                            defaultControllerText: medicineScreenController
                                 .medicinePriceController.text,
-                            textController: addMedicineScreenController
+                            textController: medicineScreenController
                                 .medicinePriceController,
+                            isObscure: false,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter the Price';
+                              } else if (int.parse(value) < 0) {
+                                return 'Price must be Greater than 0';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          /* -------------------------------------------------------------------------- */
+                          /*                               Total Quantity                               */
+                          /* -------------------------------------------------------------------------- */
+                          CustomeTextFieldLabel(
+                            labelText: "Medicine Quantity",
+                            textAlign: TextAlign.start,
+                            fontSized: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: 6.h,
+                          ),
+                          CustomeTextFormField(
+                            keyboardType: TextInputType.number,
+                            defaultControllerText: medicineScreenController
+                                .medicineQuantityController.text,
+                            textController: medicineScreenController
+                                .medicineQuantityController,
                             isObscure: false,
                             validate: (value) {
                               if (value!.isEmpty) {
@@ -190,29 +201,27 @@ class AddMedicineScreen extends StatelessWidget {
                             height: 6.h,
                           ),
                           StreamBuilder<List<PetCategoryScreenModel>>(
-                            stream: addMedicineScreenController.readCategory(),
+                            stream: medicineScreenController.readCategory(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return const Center(
                                   child: CupertinoActivityIndicator(),
                                 );
                               } else if (snapshot.hasData) {
-                                addMedicineScreenController.categoryIten!
-                                    .clear();
+                                medicineScreenController.categoryIten!.clear();
                                 for (int i = 0;
                                     i < snapshot.data!.length;
                                     i++) {
-                                  addMedicineScreenController.index =
+                                  medicineScreenController.index =
                                       snapshot.data![i];
 
-                                  addMedicineScreenController.categoryIten!.add(
+                                  medicineScreenController.categoryIten!.add(
                                     DropdownMenuItem(
                                       child: Text(
-                                        addMedicineScreenController
-                                            .index.petName
+                                        medicineScreenController.index.petName
                                             .toString(),
                                       ),
-                                      value: addMedicineScreenController
+                                      value: medicineScreenController
                                           .index.petName
                                           .toString(),
                                     ),
@@ -220,14 +229,13 @@ class AddMedicineScreen extends StatelessWidget {
                                 }
                               }
                               return DropdownButtonFormField<dynamic>(
-                                items: addMedicineScreenController.categoryIten,
+                                items: medicineScreenController.categoryIten,
                                 onChanged: (categoryValue) {
-                                  Get.snackbar('Error', categoryValue);
-                                  addMedicineScreenController
+                                  medicineScreenController
                                       .updateMenuValue(categoryValue);
                                 },
-                                value: addMedicineScreenController
-                                    .selectedCategory,
+                                value:
+                                    medicineScreenController.selectedCategory,
                                 validator: (value) =>
                                     value == null ? 'field required' : null,
                                 isExpanded: true,
@@ -250,7 +258,7 @@ class AddMedicineScreen extends StatelessWidget {
                             height: 6.h,
                           ),
                           TextFormField(
-                            controller: addMedicineScreenController
+                            controller: medicineScreenController
                                 .medicineDescriptionController,
                             maxLines: 3,
                             validator: (value) {
@@ -276,7 +284,7 @@ class AddMedicineScreen extends StatelessWidget {
                             buttonText: 'Save',
                             horPadding: 50,
                             onPressed: () {
-                              addMedicineScreenController.sendData();
+                              medicineScreenController.sendData();
                             },
                           ),
                         ],
@@ -290,13 +298,13 @@ class AddMedicineScreen extends StatelessWidget {
 
   // List<String> _categories = [];
   List<DropdownMenuItem<String>> getDropDownCategories() {
-    AddMedicineScreenController addMedicineScreenController =
-        Get.put(AddMedicineScreenController());
+    MedicineScreenController medicineScreenController =
+        Get.put(MedicineScreenController());
     return List.generate(
-        addMedicineScreenController.item.length,
+        medicineScreenController.item.length,
         (final index) => DropdownMenuItem(
-              child: Text(addMedicineScreenController.item[index]),
-              value: addMedicineScreenController.item[index],
+              child: Text(medicineScreenController.item[index]),
+              value: medicineScreenController.item[index],
             ));
   }
 }

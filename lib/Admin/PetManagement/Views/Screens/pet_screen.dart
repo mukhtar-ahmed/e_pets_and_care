@@ -1,7 +1,9 @@
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Controller/add_pet_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Controller/pet_screen_controller.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/add_pet_screen.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
@@ -15,8 +17,8 @@ import 'package:get/get.dart';
 
 class PetScreen extends StatelessWidget {
   PetScreen({Key? key}) : super(key: key);
-  AddPetScreenCotroller addPetScreenCotroller =
-      Get.put(AddPetScreenCotroller());
+  PetScreenCotroller petScreenCotroller =
+      Get.put(PetScreenCotroller());
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +59,9 @@ class PetScreen extends StatelessWidget {
               },
             ),
           ]),
-      body: GetBuilder<AddPetScreenCotroller>(
-          init: AddPetScreenCotroller(),
-          builder: (addPetScreenCotroller) {
+      body: GetBuilder<PetScreenCotroller>(
+          init: PetScreenCotroller(),
+          builder: (petScreenCotroller) {
             return SingleChildScrollView(
               child: Center(
                 child: SizedBox(
@@ -72,8 +74,8 @@ class PetScreen extends StatelessWidget {
                       /* -------------------------------------------------------------------------- */
                       /*                         Pet Display Container                         */
                       /* -------------------------------------------------------------------------- */
-                      StreamBuilder<List<PetModel>>(
-                          stream: addPetScreenCotroller.readPetCategory(),
+                      StreamBuilder<List<StockModel>>(
+                          stream: petScreenCotroller.readPetCategory(),
                           builder: (context, snapShort) {
                             if (snapShort.hasError) {
                               return const Text('Some Thing Wrong');
@@ -98,7 +100,7 @@ class PetScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: TextFormField(
-                                      controller: addPetScreenCotroller
+                                      controller: petScreenCotroller
                                           .searchController,
                                       decoration: InputDecoration(
                                         // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
@@ -110,18 +112,18 @@ class PetScreen extends StatelessWidget {
                                             onPressed: () {}),
                                       ),
                                       onChanged: (String query) {
-                                        textfieldtext = addPetScreenCotroller
+                                        textfieldtext = petScreenCotroller
                                             .searchController.text
                                             .trim();
                                         final suggestions = snapShort.data!
                                             .where((categoryfilter) {
                                           final categoryTitle = categoryfilter
-                                              .petName!
+                                              .itemName!
                                               .toLowerCase();
                                           final input = query.toLowerCase();
                                           return categoryTitle.contains(input);
                                         }).toList();
-                                        addPetScreenCotroller
+                                        petScreenCotroller
                                             .addFill(suggestions);
                                         // setState(() {
                                         //   addMedicineScreenController.fil =
@@ -144,20 +146,20 @@ class PetScreen extends StatelessWidget {
                                               crossAxisSpacing: 0,
                                               crossAxisCount: 2,
                                               mainAxisExtent: 296),
-                                      itemCount: addPetScreenCotroller
+                                      itemCount: petScreenCotroller
                                                   .searchController.text
                                                   .trim() !=
                                               ''
-                                          ? addPetScreenCotroller.fil.length
+                                          ? petScreenCotroller.fil.length
                                           : snapShort.data!.length,
                                       itemBuilder:
                                           (BuildContext context, index) {
                                         return buildPetContainer(
-                                            index1: addPetScreenCotroller
+                                            index1: petScreenCotroller
                                                         .searchController.text
                                                         .trim() !=
                                                     ''
-                                                ? addPetScreenCotroller
+                                                ? petScreenCotroller
                                                     .fil[index]
                                                 : snapShort.data![index]);
                                       }),
@@ -176,7 +178,7 @@ class PetScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPetContainer({PetModel? index1}) {
+  Widget buildPetContainer({StockModel? index1}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       child: Container(
@@ -203,7 +205,7 @@ class PetScreen extends StatelessWidget {
                   child: Image(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      index1!.imageUrl.toString(),
+                      index1!.itemImageUrl.toString(),
                     ),
                   ),
                 ),
@@ -222,7 +224,7 @@ class PetScreen extends StatelessWidget {
                     children: [
                       /* ----------------------------- Name Of Pet ---------------------------- */
                       CustomeTextFieldLabel(
-                        labelText: index1.petName.toString(),
+                        labelText: index1.itemName.toString(),
                         textAlign: TextAlign.start,
                         fontSized: 14.sp,
                         color: Colors.black,
@@ -235,7 +237,7 @@ class PetScreen extends StatelessWidget {
                       // ignore: prefer_const_constructors
                       Flexible(
                         child: Text(
-                          index1.petDescription.toString(),
+                          index1.itemDescription.toString(),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -247,16 +249,18 @@ class PetScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'RS: ${index1.petPrice}',
+                            'RS: ${index1.itemPrice}',
                             style: TextStyle(
                                 fontSize: 18.sp, fontWeight: FontWeight.w900),
                           ),
                           Container(
+                            alignment: Alignment.center,
                             width: 50.w,
                             height: 28.h,
-                            child: Icon(Icons.circle,
-                                color:
-                                    index1.active! ? Colors.green : Colors.red),
+                            child: Text(
+                              index1.itemQuantity.toString(),
+                              style: TextStyle(fontSize: 20.sp),
+                            ),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(5)),
@@ -273,7 +277,7 @@ class PetScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          addPetScreenCotroller.deletePet(index1);
+                          petScreenCotroller.deletePet(index1);
                         },
                         child: SizedBox(
                           width: 73.w,
@@ -294,9 +298,9 @@ class PetScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Get.bottomSheet(
-                            GetBuilder<AddPetScreenCotroller>(
-                                init: AddPetScreenCotroller(),
-                                builder: (addPetScreenCotroller) {
+                            GetBuilder<PetScreenCotroller>(
+                                init: PetScreenCotroller(),
+                                builder: (petScreenCotroller) {
                                   return SingleChildScrollView(
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -306,9 +310,9 @@ class PetScreen extends StatelessWidget {
                                           topRight: Radius.circular(20.r),
                                         ),
                                       ),
-                                      height: 720.h,
+                                      height: 780.h,
                                       child: Form(
-                                        key: addPetScreenCotroller.formKey,
+                                        key: petScreenCotroller.formKey,
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 25.w),
@@ -330,22 +334,6 @@ class PetScreen extends StatelessWidget {
                                                         fontWeight:
                                                             FontWeight.w900),
                                                   ),
-                                                  SizedBox(
-                                                    width: 8.w,
-                                                  ),
-                                                  FlutterSwitch(
-                                                    width: 100.w,
-                                                    height: 35.h,
-                                                    valueFontSize: 25.0,
-                                                    toggleSize: 45.0,
-                                                    value: index1.active!,
-                                                    onToggle: (val) {
-                                                      index1.active =
-                                                          addPetScreenCotroller
-                                                              .updateActive(
-                                                                  val);
-                                                    },
-                                                  ),
                                                 ],
                                               ),
                                               SizedBox(
@@ -356,21 +344,21 @@ class PetScreen extends StatelessWidget {
                                               CircleAvatar(
                                                 radius: 100.r,
                                                 backgroundImage:
-                                                    addPetScreenCotroller
+                                                    petScreenCotroller
                                                                 .image !=
                                                             null
                                                         ? FileImage(
-                                                                addPetScreenCotroller
+                                                                petScreenCotroller
                                                                     .image!)
                                                             as ImageProvider
                                                         : NetworkImage(
-                                                            index1.imageUrl!,
+                                                            index1.itemImageUrl!,
                                                           ),
                                                 // ignore: prefer_const_literals_to_create_immutables
                                                 child: Stack(children: [
                                                   // ignore: prefer_const_constructors
                                                   GestureDetector(
-                                                    onTap: addPetScreenCotroller
+                                                    onTap: petScreenCotroller
                                                         .selectFile,
                                                     child: Align(
                                                       alignment:
@@ -411,9 +399,9 @@ class PetScreen extends StatelessWidget {
                                                     CustomeTextFormField(
                                                       //labelText: index1.title,
                                                       defaultControllerText:
-                                                          index1.petName!,
+                                                          index1.itemName!,
                                                       textController:
-                                                          addPetScreenCotroller
+                                                          petScreenCotroller
                                                               .petNameController,
                                                       isObscure: false,
                                                       validate: (value) {
@@ -452,9 +440,9 @@ class PetScreen extends StatelessWidget {
                                                 keyboardType:
                                                     TextInputType.number,
                                                 defaultControllerText:
-                                                    index1.petPrice.toString(),
+                                                    index1.itemPrice.toString(),
                                                 textController:
-                                                    addPetScreenCotroller
+                                                    petScreenCotroller
                                                         .petPriceController,
                                                 isObscure: false,
                                                 validate: (value) {
@@ -463,6 +451,41 @@ class PetScreen extends StatelessWidget {
                                                   } else if (int.parse(value) <
                                                       0) {
                                                     return 'Price must be Greater than 0';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
+                                              /* -------------------------------------------------------------------------- */
+                                              /*                               Total Quantity                               */
+                                              /* -------------------------------------------------------------------------- */
+                                              CustomeTextFieldLabel(
+                                                labelText: "Pet Quantity",
+                                                textAlign: TextAlign.start,
+                                                fontSized: 14.sp,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              SizedBox(
+                                                height: 6.h,
+                                              ),
+                                              CustomeTextFormField(
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                defaultControllerText:
+                                                    index1.itemQuantity.toString(),
+                                                textController:
+                                                    petScreenCotroller
+                                                        .petQuantityController,
+                                                isObscure: false,
+                                                validate: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Please enter the Quantity';
+                                                  } else if (int.parse(value) <
+                                                      0) {
+                                                    return 'Quantity must be Greater than 0';
                                                   }
                                                   return null;
                                                 },
@@ -485,7 +508,7 @@ class PetScreen extends StatelessWidget {
                                               ),
                                               StreamBuilder<
                                                   List<PetCategoryScreenModel>>(
-                                                stream: addPetScreenCotroller
+                                                stream: petScreenCotroller
                                                     .readCategory(),
                                                 builder: (context, snapshot) {
                                                   if (!snapshot.hasData) {
@@ -494,7 +517,7 @@ class PetScreen extends StatelessWidget {
                                                           CupertinoActivityIndicator(),
                                                     );
                                                   } else if (snapshot.hasData) {
-                                                    addPetScreenCotroller
+                                                    petScreenCotroller
                                                         .categoryIten!
                                                         .clear();
                                                     for (int i = 0;
@@ -502,21 +525,21 @@ class PetScreen extends StatelessWidget {
                                                             snapshot
                                                                 .data!.length;
                                                         i++) {
-                                                      addPetScreenCotroller
+                                                      petScreenCotroller
                                                               .index =
                                                           snapshot.data![i];
 
-                                                      addPetScreenCotroller
+                                                      petScreenCotroller
                                                           .categoryIten!
                                                           .add(
                                                         DropdownMenuItem(
                                                           child: Text(
-                                                            addPetScreenCotroller
+                                                            petScreenCotroller
                                                                 .index.petName
                                                                 .toString(),
                                                           ),
                                                           value:
-                                                              addPetScreenCotroller
+                                                              petScreenCotroller
                                                                   .index.petName
                                                                   .toString(),
                                                         ),
@@ -525,12 +548,10 @@ class PetScreen extends StatelessWidget {
                                                   }
                                                   return DropdownButtonFormField<
                                                       dynamic>(
-                                                    items: addPetScreenCotroller
+                                                    items: petScreenCotroller
                                                         .categoryIten,
                                                     onChanged: (categoryValue) {
-                                                      Get.snackbar('Error',
-                                                          categoryValue);
-                                                      addPetScreenCotroller
+                                                      petScreenCotroller
                                                           .updateMenuValue(
                                                               categoryValue);
                                                     },
@@ -560,10 +581,10 @@ class PetScreen extends StatelessWidget {
                                                 height: 6.h,
                                               ),
                                               TextFormField(
-                                                controller: addPetScreenCotroller
+                                                controller: petScreenCotroller
                                                     .petDescriptionController
                                                   ..text =
-                                                      index1.petDescription!,
+                                                      index1.itemDescription!,
                                                 maxLines: 3,
                                                 validator: (value) {
                                                   if (value != null &&
@@ -591,7 +612,7 @@ class PetScreen extends StatelessWidget {
                                                 horPadding: 50,
                                                 onPressed: () {
                                                   Get.back();
-                                                  addPetScreenCotroller
+                                                  petScreenCotroller
                                                       .updateCategory(index1);
                                                 },
                                               ),

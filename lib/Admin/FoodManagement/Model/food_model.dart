@@ -1,14 +1,14 @@
 class FoodModel {
-  bool? active;
   String? foodName;
   String? imageUrl;
   int? foodPrice;
+  int? quantity;
   String? petCategory;
   String? foodDescription;
   String? foodId;
 
   FoodModel({
-    this.active,
+    this.quantity,
     this.foodName,
     this.imageUrl,
     this.foodPrice,
@@ -20,7 +20,7 @@ class FoodModel {
 //Receving from server
   static FoodModel fromMap(Map<String, dynamic> json) {
     return FoodModel(
-        active: json['active'],
+        quantity: json['quantity'],
         foodName: json['foodName'],
         imageUrl: json['imageUrl'],
         foodPrice: json['foodPrice'],
@@ -32,7 +32,7 @@ class FoodModel {
 //Sending to server
   Map<String, dynamic> toMap() {
     return {
-      'active': active,
+      'quantity': quantity,
       'foodName': foodName,
       'imageUrl': imageUrl,
       'foodPrice': foodPrice,

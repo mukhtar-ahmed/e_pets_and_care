@@ -2,13 +2,14 @@ import 'dart:io';
 import 'package:e_pets_and_care/Admin/FoodManagement/Model/food_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddFoodScreenController extends GetxController {
+class FoodScreenController extends GetxController {
   final formKey = GlobalKey<FormState>();
   TextEditingController foodNameController = TextEditingController();
   TextEditingController foodPriceController = TextEditingController();
@@ -25,9 +26,9 @@ class AddFoodScreenController extends GetxController {
   var selectedCategory;
   var index;
   List<DropdownMenuItem<dynamic>>? categoryIten = [];
-  FoodModel foodModel = FoodModel();
+  StockModel stockModel = StockModel();
   TextEditingController searchController = TextEditingController();
-  List<FoodModel> fil = [];
+  List<StockModel> fil = [];
 
   updateMenuValue(value) {
     selectedCategory = value;
@@ -68,24 +69,25 @@ class AddFoodScreenController extends GetxController {
   sendData() async {
     if ((formKey.currentState!.validate()) || image != null) {
       final fileName = basename(image!.path);
-      var storageImage = FirebaseStorage.instance.ref('food/$fileName');
+      var storageImage = FirebaseStorage.instance.ref('stock/food/$fileName');
       var task = storageImage.putFile(image!);
       imageUrl = await (await task).ref.getDownloadURL();
 
-      final docRef = FirebaseFirestore.instance.collection("food").doc();
+      final docRef = FirebaseFirestore.instance.collection("stock").doc();
 
-      foodModel.foodName = foodNameController.text;
-      foodModel.imageUrl = imageUrl;
-      foodModel.foodPrice = int.parse(foodPriceController.text);
-      foodModel.quantity = int.parse(foodQuantityController.text);
-      foodModel.petCategory = selectedCategory;
-      foodModel.foodDescription = foodDescriptionController.text;
-      foodModel.foodId = docRef.id;
+      stockModel.itemName = foodNameController.text;
+      stockModel.itemImageUrl = imageUrl;
+      stockModel.itemPrice = int.parse(foodPriceController.text);
+      stockModel.itemQuantity = int.parse(foodQuantityController.text);
+      stockModel.petCategory = selectedCategory;
+      stockModel.itemCategory = 'food';
+      stockModel.itemDescription = foodDescriptionController.text;
+      stockModel.itemId = docRef.id;
 
       await firebaseFirestore
-          .collection('food')
+          .collection('stock')
           .doc(docRef.id)
-          .set(foodModel.toMap());
+          .set(stockModel.toMap());
       formKey.currentState!.reset();
       image = null;
       foodNameController.clear();
@@ -99,42 +101,44 @@ class AddFoodScreenController extends GetxController {
   }
 
 /* -------------------------------------------------------------------------- */
-/*                        Medicine Collection Read Data                       */
+/*                        Food Collection Read Data                           */
 /* -------------------------------------------------------------------------- */
-  Stream<List<FoodModel>> readMedicineCategory() => FirebaseFirestore.instance
-      .collection('food')
+  Stream<List<StockModel>> readFoodCategory() => FirebaseFirestore.instance
+      .collection('stock')
+      .where('itemCategory', isEqualTo: 'food')
       .snapshots()
       .map((snapshots) =>
-          snapshots.docs.map((doc) => FoodModel.fromMap(doc.data())).toList());
+          snapshots.docs.map((doc) => StockModel.fromMap(doc.data())).toList());
 
 /* -------------------------------------------------------------------------- */
 /*                                   Delete                                   */
 /* -------------------------------------------------------------------------- */
-  void deleteFood(FoodModel index1) async {
-    final medicine = firebaseFirestore.collection("food").doc(index1.foodId);
-    medicine.delete();
+  void deleteFood(StockModel index1) async {
+    final food = firebaseFirestore.collection("stock").doc(index1.itemId);
+    food.delete();
     update();
   }
 
 /* -------------------------------------------------------------------------- */
-  /*                               Update Medicine                              */
+  /*                               Update Food                              */
   /* -------------------------------------------------------------------------- */
-  void updateCategory(FoodModel index1) async {
+  void updateCategory(StockModel index1) async {
     final fileName = basename(image!.path);
-    var storageImage = FirebaseStorage.instance.ref('food/$fileName');
+    var storageImage = FirebaseStorage.instance.ref('stock/food/$fileName');
     var task = storageImage.putFile(image!);
     imageUrl = await (await task).ref.getDownloadURL();
     // final category = firebaseFirestore.collection("category").doc('uid');
-    final medicine = firebaseFirestore.collection("food").doc(index1.foodId);
+    final food = firebaseFirestore.collection("stock").doc(index1.itemId);
 
-    foodModel.foodName = foodNameController.text;
-    foodModel.imageUrl = imageUrl;
-    foodModel.foodPrice = int.parse(foodPriceController.text);
-    foodModel.quantity = int.parse(foodQuantityController.text);
-    foodModel.petCategory = selectedCategory;
-    foodModel.foodDescription = foodDescriptionController.text;
+    stockModel.itemName = foodNameController.text;
+    stockModel.itemImageUrl = imageUrl;
+    stockModel.itemPrice = int.parse(foodPriceController.text);
+    stockModel.itemQuantity = int.parse(foodQuantityController.text);
+    stockModel.petCategory = selectedCategory;
+    stockModel.itemCategory = 'food';
+    stockModel.itemDescription = foodDescriptionController.text;
 
-    await medicine.update(foodModel.toMap());
+    await food.update(stockModel.toMap());
 
     // category.update({
     //   'title': titleController.text,

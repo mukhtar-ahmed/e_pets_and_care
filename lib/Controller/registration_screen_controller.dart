@@ -62,7 +62,8 @@ class RegistrationScreenController extends GetxController {
     userModel.fullName = registrationScreenController.nameController.text;
     userModel.email = user.email;
     userModel.role = 'user';
-    Get.toNamed(BottomNavigationBars.id);
+    Get.toNamed(EmailVerificationScreen.id);
+    //Get.toNamed(BottomNavigationBars.id);
 
     await registrationScreenController.firebaseFirestore
         .collection('users')

@@ -1,14 +1,15 @@
 class PetModel {
-  bool? active;
+  
   String? petName;
   String? imageUrl;
   int? petPrice;
+  int? quantity;
   String? petCategory;
   String? petDescription;
   String? petId;
 
   PetModel(
-      {this.active,
+      {this.quantity,
       this.petName,
       this.imageUrl,
       this.petPrice,
@@ -19,7 +20,7 @@ class PetModel {
 //Receving from server
   static PetModel fromMap(Map<String, dynamic> json) {
     return PetModel(
-        active: json['active'],
+        quantity: json['quantity'],
         petName: json['petName'],
         imageUrl: json['imageUrl'],
         petPrice: json['petPrice'],
@@ -31,7 +32,7 @@ class PetModel {
 //Sending to server
   Map<String, dynamic> toMap() {
     return {
-      'active': active,
+      'quantity': quantity,
       'petName': petName,
       'imageUrl': imageUrl,
       'petPrice': petPrice,

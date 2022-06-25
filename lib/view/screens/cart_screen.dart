@@ -1,4 +1,3 @@
-import 'package:e_pets_and_care/Admin/MedicineManagement/Model/medicine_model.dart';
 import 'package:e_pets_and_care/Controller/cart_screen_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
@@ -332,7 +331,7 @@ class CartScreen extends StatelessWidget {
                                     //     cartScreenController.productTotalPrice);
                                     int a =
                                         cartScreenController.totalBagPrice();
-                                    print("mukhatr ${a}");
+                                    
                                     Get.toNamed(CheckoutScreen.id,
                                         arguments: a);
                                   },

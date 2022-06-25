@@ -1,6 +1,10 @@
+import 'package:e_pets_and_care/Admin/CategoryManagement/Model/category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/Dashboard/Controller/dashboard_controller.dart';
 import 'package:e_pets_and_care/Admin/Dashboard/Views/Widget/custome_dashboard_container.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:e_pets_and_care/constant.dart';
+import 'package:e_pets_and_care/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -24,16 +28,26 @@ class DashboardScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                                 Total User                                 */
                     /* -------------------------------------------------------------------------- */
-                    const CustomeDashboardContainer(
-                      width: 375,
-                      icon: Icons.person,
-                      iconSize: 150,
-                      childContainerWidth: 150,
-                      countText: '19',
-                      counTextSize: 50,
-                      countName: 'Total User',
-                      countNameSize: 20,
-                    ),
+                    StreamBuilder<List<UserModel>>(
+                        stream: dashboardController.readUserRoleUser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Text('Some Thing Wrong');
+                          } else if (snapshot.hasData) {
+                            return CustomeDashboardContainer(
+                              width: 375,
+                              icon: Icons.person,
+                              iconSize: 150,
+                              childContainerWidth: 150,
+                              countText: snapshot.data!.length.toString(),
+                              counTextSize: 50,
+                              countName: 'Total User',
+                              countNameSize: 20,
+                            );
+                          } else {
+                            return const Center(child: CircleAvatar());
+                          }
+                        }),
                     SizedBox(
                       height: 30.h,
                     ),
@@ -43,70 +57,165 @@ class DashboardScreen extends StatelessWidget {
                         /* -------------------------------------------------------------------------- */
                         /*                                  Category                                  */
                         /* -------------------------------------------------------------------------- */
-                        CustomeDashboardContainer(
-                          width: 160,
-                          icon: Icons.menu,
-                          iconSize: 50,
-                          childContainerWidth: 80,
-                          countText:
-                              dashboardController.categoryLength.toString(),
-                          counTextSize: 25,
-                          countName: 'Category',
-                          countNameSize: 16,
-                        ),
+                        StreamBuilder<List<CategoryScreenModel>>(
+                            stream: dashboardController.readCategory(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Some Thing Wrong');
+                              } else if (snapshot.hasData) {
+                                return CustomeDashboardContainer(
+                                  width: 160,
+                                  icon: Icons.menu,
+                                  iconSize: 50,
+                                  childContainerWidth: 80,
+                                  countText: snapshot.data!.length.toString(),
+                                  counTextSize: 25,
+                                  countName: 'Category',
+                                  countNameSize: 16,
+                                );
+                              } else {
+                                return const Center(child: CircleAvatar());
+                              }
+                            }),
                         SizedBox(
                           width: 15.w,
                         ),
                         /* -------------------------------------------------------------------------- */
                         /*                                Pet Category                                */
                         /* -------------------------------------------------------------------------- */
-                        const CustomeDashboardContainer(
-                          width: 160,
-                          icon: Icons.pets,
-                          iconSize: 50,
-                          childContainerWidth: 80,
-                          countText: '19',
-                          counTextSize: 25,
-                          countName: 'Pet Category',
-                          countNameSize: 16,
-                        ),
+                        StreamBuilder<List<PetCategoryScreenModel>>(
+                            stream: dashboardController.readPetCategory(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Some Thing Wrong');
+                              } else if (snapshot.hasData) {
+                                return CustomeDashboardContainer(
+                                  width: 160,
+                                  icon: Icons.pets,
+                                  iconSize: 50,
+                                  childContainerWidth: 80,
+                                  countText: snapshot.data!.length.toString(),
+                                  counTextSize: 25,
+                                  countName: 'Pet Category',
+                                  countNameSize: 16,
+                                );
+                              } else {
+                                return const Center(child: CircleAvatar());
+                              }
+                            }),
                       ],
                     ),
                     SizedBox(
                       height: 20.h,
                     ),
+                    /* -------------------------------------------------------------------------- */
+                    /*                                 Total Item                                 */
+                    /* -------------------------------------------------------------------------- */
+                    StreamBuilder<List<StockModel>>(
+                        stream: dashboardController.readStockCollection(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Text('Some Thing Wrong');
+                          } else if (snapshot.hasData) {
+                            return CustomeDashboardContainer(
+                              width: 375,
+                              icon: Icons.inventory,
+                              iconSize: 150,
+                              childContainerWidth: 150,
+                              countText: snapshot.data!.length.toString(),
+                              counTextSize: 50,
+                              countName: 'Total Item In Stock',
+                              countNameSize: 20,
+                            );
+                          } else {
+                            return const Center(child: CircleAvatar());
+                          }
+                        }),
+                    SizedBox(
+                      height: 30.h,
+                    ),
                     /* ---------------------------- Food and Medicine --------------------------- */
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         /* -------------------------------------------------------------------------- */
                         /*                                    Food                                    */
                         /* -------------------------------------------------------------------------- */
-                        const CustomeDashboardContainer(
-                          width: 160,
-                          icon: Icons.food_bank,
-                          iconSize: 50,
-                          childContainerWidth: 80,
-                          countText: '19',
-                          counTextSize: 25,
-                          countName: 'Food',
-                          countNameSize: 16,
-                        ),
+                        StreamBuilder<List<StockModel>>(
+                            stream:
+                                dashboardController.readStockFoodCollection(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Some Thing Wrong');
+                              } else if (snapshot.hasData) {
+                                return CustomeDashboardContainer(
+                                  width: 100,
+                                  icon: Icons.food_bank,
+                                  iconSize: 50,
+                                  childContainerWidth: 50,
+                                  countText: snapshot.data!.length.toString(),
+                                  counTextSize: 20,
+                                  countName: 'Food',
+                                  countNameSize: 10,
+                                );
+                              } else {
+                                return const Center(child: CircleAvatar());
+                              }
+                            }),
                         SizedBox(
-                          width: 15.w,
+                          width: 5.w,
                         ),
                         /* -------------------------------------------------------------------------- */
                         /*                                  Medicine                                  */
                         /* -------------------------------------------------------------------------- */
-                        const CustomeDashboardContainer(
-                          width: 160,
-                          icon: Icons.medication,
-                          iconSize: 50,
-                          childContainerWidth: 80,
-                          countText: '19',
-                          counTextSize: 25,
-                          countName: 'Medicine',
-                          countNameSize: 16,
+                        StreamBuilder<List<StockModel>>(
+                            stream: dashboardController
+                                .readStockMedicineCollection(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Some Thing Wrong');
+                              } else if (snapshot.hasData) {
+                                return CustomeDashboardContainer(
+                                  width: 100,
+                                  icon: Icons.medication,
+                                  iconSize: 50,
+                                  childContainerWidth: 50,
+                                  countText: snapshot.data!.length.toString(),
+                                  counTextSize: 20,
+                                  countName: 'Medicine',
+                                  countNameSize: 10,
+                                );
+                              } else {
+                                return const Center(child: CircleAvatar());
+                              }
+                            }),
+                        SizedBox(
+                          width: 5.w,
                         ),
+                        /* -------------------------------------------------------------------------- */
+                        /*                                     Pet                                    */
+                        /* -------------------------------------------------------------------------- */
+                        StreamBuilder<List<StockModel>>(
+                            stream:
+                                dashboardController.readStockPetCollection(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Some Thing Wrong');
+                              } else if (snapshot.hasData) {
+                                return CustomeDashboardContainer(
+                                  width: 100,
+                                  icon: Icons.pets,
+                                  iconSize: 50,
+                                  childContainerWidth: 50,
+                                  countText: snapshot.data!.length.toString(),
+                                  counTextSize: 20,
+                                  countName: 'Pets',
+                                  countNameSize: 10,
+                                );
+                              } else {
+                                return const Center(child: CircleAvatar());
+                              }
+                            }),
                       ],
                     ),
                   ],

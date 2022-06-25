@@ -6,14 +6,15 @@ import 'package:e_pets_and_care/Admin/FoodManagement/Model/food_model.dart';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Model/medicine_model.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:e_pets_and_care/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-class HomeScreenController extends GetxController {
+class HomeController extends GetxController {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   UserModel loggedInUser = UserModel();
-  PetModel petModel = PetModel();
+  //PetModel petModel = PetModel();
   User? user = FirebaseAuth.instance.currentUser;
   bool a = false;
   List<CategoryScreenModel> categoryData = [];
@@ -26,7 +27,6 @@ class HomeScreenController extends GetxController {
   List<FoodModel> foodData = [];
   bool isPetCategory = false;
   int quantity = 0;
-  
 
   void updateMainCategoryIndex(index) {
     mainCategoryIndex = index;
@@ -42,19 +42,23 @@ class HomeScreenController extends GetxController {
 /* -------------------------------------------------------------------------- */
 /*                  Read Food Category for Field petCategory                  */
 /* -------------------------------------------------------------------------- */
-  Stream<List<FoodModel>> readFoodCategory() {
+  Stream<List<StockModel>> readFoodCategory() {
     if (isPetCategory == true && petCategoryOnPressed != '') {
       return FirebaseFirestore.instance
-          .collection('food')
+          .collection('stock')
           .where('petCategory', isEqualTo: petCategoryOnPressed)
+          .where('itemCategory', isEqualTo: 'food')
           .snapshots()
           .map((snapshots) => snapshots.docs
-              .map((doc) => FoodModel.fromMap(doc.data()))
+              .map((doc) => StockModel.fromMap(doc.data()))
               .toList());
     } else {
-      return FirebaseFirestore.instance.collection('food').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => FoodModel.fromMap(doc.data()))
+      return FirebaseFirestore.instance
+          .collection('stock')
+          .where('itemCategory', isEqualTo: 'food')
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((doc) => StockModel.fromMap(doc.data()))
               .toList());
     }
   }
@@ -62,19 +66,23 @@ class HomeScreenController extends GetxController {
   /* -------------------------------------------------------------------------- */
   /*                Read Medicine Category for Field petCategory                */
   /* -------------------------------------------------------------------------- */
-  Stream<List<MedicineModel>> readMedicineCategory() {
+  Stream<List<StockModel>> readMedicineCategory() {
     if (isPetCategory == true && petCategoryOnPressed != '') {
       return FirebaseFirestore.instance
-          .collection('medicine')
+          .collection('stock')
           .where('petCategory', isEqualTo: petCategoryOnPressed)
+          .where('itemCategory', isEqualTo: 'medicine')
           .snapshots()
           .map((snapshots) => snapshots.docs
-              .map((doc) => MedicineModel.fromMap(doc.data()))
+              .map((doc) => StockModel.fromMap(doc.data()))
               .toList());
     } else {
-      return FirebaseFirestore.instance.collection('medicine').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => MedicineModel.fromMap(doc.data()))
+      return FirebaseFirestore.instance
+          .collection('stock')
+          .where('itemCategory', isEqualTo: 'medicine')
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((doc) => StockModel.fromMap(doc.data()))
               .toList());
     }
   }
@@ -82,19 +90,23 @@ class HomeScreenController extends GetxController {
   /* -------------------------------------------------------------------------- */
   /*                   Read Pet  for Field petCategory                  */
   /* -------------------------------------------------------------------------- */
-  Stream<List<PetModel>> readPet() {
+  Stream<List<StockModel>> readPet() {
     if (isPetCategory == true && petCategoryOnPressed != '') {
       return FirebaseFirestore.instance
-          .collection('pet')
+          .collection('stock')
           .where('petCategory', isEqualTo: petCategoryOnPressed)
+          .where('itemCategory', isEqualTo: 'pet')
           .snapshots()
           .map((snapshots) => snapshots.docs
-              .map((doc) => PetModel.fromMap(doc.data()))
+              .map((doc) => StockModel.fromMap(doc.data()))
               .toList());
     } else {
-      return FirebaseFirestore.instance.collection('pet').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => PetModel.fromMap(doc.data()))
+      return FirebaseFirestore.instance
+          .collection('stock')
+          .where('itemCategory', isEqualTo: 'pet')
+          .snapshots()
+          .map((snapshots) => snapshots.docs
+              .map((doc) => StockModel.fromMap(doc.data()))
               .toList());
     }
   }
@@ -121,7 +133,6 @@ class HomeScreenController extends GetxController {
     }
     update();
   }
-
 
   updatePetCategoryOnPressed(PetCategoryScreenModel index) {
     if (petCategoryData.contains(index)) {

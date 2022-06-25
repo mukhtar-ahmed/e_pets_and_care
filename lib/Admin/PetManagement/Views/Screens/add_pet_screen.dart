@@ -1,5 +1,6 @@
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Controller/add_pet_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Controller/pet_screen_controller.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_form_field.dart';
@@ -15,9 +16,9 @@ class AddPetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AddPetScreenCotroller>(
-        init: AddPetScreenCotroller(),
-        builder: (addPetScreenCotroller) {
+    return GetBuilder<PetScreenCotroller>(
+        init: PetScreenCotroller(),
+        builder: (petScreenCotroller) {
           return Scaffold(
               appBar: AppBar(
                 // ignore: prefer_const_constructors
@@ -38,7 +39,7 @@ class AddPetScreen extends StatelessWidget {
                   ),
                   height: 812.h,
                   child: Form(
-                    key: addPetScreenCotroller.formKey,
+                    key: petScreenCotroller.formKey,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.w),
                       child: Column(
@@ -53,27 +54,6 @@ class AddPetScreen extends StatelessWidget {
                               SizedBox(
                                 height: 50.h,
                               ),
-                              Text(
-                                addPetScreenCotroller.isActive
-                                    ? 'Active'
-                                    : 'Inactive',
-                                style: TextStyle(
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w900),
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              FlutterSwitch(
-                                width: 100.w,
-                                height: 35.h,
-                                valueFontSize: 25.0,
-                                toggleSize: 45.0,
-                                value: addPetScreenCotroller.isActive,
-                                onToggle: (val) {
-                                  addPetScreenCotroller.updateActive(val);
-                                },
-                              ),
                             ],
                           ),
                           SizedBox(
@@ -84,14 +64,14 @@ class AddPetScreen extends StatelessWidget {
                           CircleAvatar(
                             radius: 80.r,
                             // ignore: unnecessary_cast
-                            backgroundImage: addPetScreenCotroller.image != null
-                                ? FileImage(addPetScreenCotroller.image!)
+                            backgroundImage: petScreenCotroller.image != null
+                                ? FileImage(petScreenCotroller.image!)
                                 : const NetworkImage("null") as ImageProvider,
                             // ignore: prefer_const_literals_to_create_immutables
                             child: Stack(children: [
                               // ignore: prefer_const_constructors
                               GestureDetector(
-                                onTap: addPetScreenCotroller.selectFile,
+                                onTap: petScreenCotroller.selectFile,
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: CircleAvatar(
@@ -124,9 +104,9 @@ class AddPetScreen extends StatelessWidget {
                           ),
                           CustomeTextFormField(
                             defaultControllerText:
-                                addPetScreenCotroller.petNameController.text,
+                                petScreenCotroller.petNameController.text,
                             textController:
-                                addPetScreenCotroller.petNameController,
+                                petScreenCotroller.petNameController,
                             isObscure: false,
                             validate: (value) {
                               if (value != null && value.isNotEmpty) {
@@ -158,15 +138,47 @@ class AddPetScreen extends StatelessWidget {
                           CustomeTextFormField(
                             keyboardType: TextInputType.number,
                             defaultControllerText:
-                                addPetScreenCotroller.petPriceController.text,
+                                petScreenCotroller.petPriceController.text,
                             textController:
-                                addPetScreenCotroller.petPriceController,
+                                petScreenCotroller.petPriceController,
                             isObscure: false,
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter the Price';
                               } else if (int.parse(value) < 0) {
                                 return 'Price must be Greater than 0';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          /* -------------------------------------------------------------------------- */
+                          /*                               Total Quantity                               */
+                          /* -------------------------------------------------------------------------- */
+                          CustomeTextFieldLabel(
+                            labelText: "Pet Quantity",
+                            textAlign: TextAlign.start,
+                            fontSized: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: 6.h,
+                          ),
+                          CustomeTextFormField(
+                            keyboardType: TextInputType.number,
+                            defaultControllerText:
+                                petScreenCotroller.petQuantityController.text,
+                            textController:
+                                petScreenCotroller.petQuantityController,
+                            isObscure: false,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter the Quantity';
+                              } else if (int.parse(value) < 0) {
+                                return 'Quantity must be Greater than 0';
                               }
                               return null;
                             },
@@ -188,40 +200,39 @@ class AddPetScreen extends StatelessWidget {
                             height: 6.h,
                           ),
                           StreamBuilder<List<PetCategoryScreenModel>>(
-                            stream: addPetScreenCotroller.readCategory(),
+                            stream: petScreenCotroller.readCategory(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return const Center(
                                   child: CupertinoActivityIndicator(),
                                 );
                               } else if (snapshot.hasData) {
-                                addPetScreenCotroller.categoryIten!.clear();
+                                petScreenCotroller.categoryIten!.clear();
                                 for (int i = 0;
                                     i < snapshot.data!.length;
                                     i++) {
-                                  addPetScreenCotroller.index =
-                                      snapshot.data![i];
+                                  petScreenCotroller.index = snapshot.data![i];
 
-                                  addPetScreenCotroller.categoryIten!.add(
+                                  petScreenCotroller.categoryIten!.add(
                                     DropdownMenuItem(
                                       child: Text(
-                                        addPetScreenCotroller.index.petName
+                                        petScreenCotroller.index.petName
                                             .toString(),
                                       ),
-                                      value: addPetScreenCotroller.index.petName
+                                      value: petScreenCotroller.index.petName
                                           .toString(),
                                     ),
                                   );
                                 }
                               }
                               return DropdownButtonFormField<dynamic>(
-                                items: addPetScreenCotroller.categoryIten,
+                                items: petScreenCotroller.categoryIten,
                                 onChanged: (categoryValue) {
                                   Get.snackbar('Error', categoryValue);
-                                  addPetScreenCotroller
+                                  petScreenCotroller
                                       .updateMenuValue(categoryValue);
                                 },
-                                value: addPetScreenCotroller.selectedCategory,
+                                value: petScreenCotroller.selectedCategory,
                                 validator: (value) =>
                                     value == null ? 'field required' : null,
                                 isExpanded: true,
@@ -245,7 +256,7 @@ class AddPetScreen extends StatelessWidget {
                           ),
                           TextFormField(
                             controller:
-                                addPetScreenCotroller.petDescriptionController,
+                                petScreenCotroller.petDescriptionController,
                             maxLines: 3,
                             validator: (value) {
                               if (value != null && value.isNotEmpty) {
@@ -270,7 +281,7 @@ class AddPetScreen extends StatelessWidget {
                             buttonText: 'Save',
                             horPadding: 50,
                             onPressed: () {
-                              addPetScreenCotroller.sendData();
+                              petScreenCotroller.sendData();
                             },
                           ),
                         ],
@@ -284,13 +295,12 @@ class AddPetScreen extends StatelessWidget {
 
   // List<String> _categories = [];
   List<DropdownMenuItem<String>> getDropDownCategories() {
-    AddPetScreenCotroller addPetScreenCotroller =
-        Get.put(AddPetScreenCotroller());
+    PetScreenCotroller petScreenCotroller = Get.put(PetScreenCotroller());
     return List.generate(
-        addPetScreenCotroller.item.length,
+        petScreenCotroller.item.length,
         (final index) => DropdownMenuItem(
-              child: Text(addPetScreenCotroller.item[index]),
-              value: addPetScreenCotroller.item[index],
+              child: Text(petScreenCotroller.item[index]),
+              value: petScreenCotroller.item[index],
             ));
   }
 }

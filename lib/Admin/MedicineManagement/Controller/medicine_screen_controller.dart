@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Model/medicine_model.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,14 +12,14 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: duplicate_ignore
-class AddMedicineScreenController extends GetxController {
+class MedicineScreenController extends GetxController {
   final formKey = GlobalKey<FormState>();
   TextEditingController medicineNameController = TextEditingController();
   TextEditingController medicinePriceController = TextEditingController();
   TextEditingController medicineQuantityController = TextEditingController();
   TextEditingController medicineDescriptionController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  List<MedicineModel> fil = [];
+  List<StockModel> fil = [];
 
   late XFile photo;
   File? image;
@@ -30,7 +31,7 @@ class AddMedicineScreenController extends GetxController {
   var selectedCategory;
   var index;
   List<DropdownMenuItem<dynamic>>? categoryIten = [];
-  MedicineModel medicineModel = MedicineModel();
+  StockModel stockModel = StockModel();
 
   addFill(suggestions) {
     fil = suggestions;
@@ -54,10 +55,13 @@ class AddMedicineScreenController extends GetxController {
 /* -------------------------------------------------------------------------- */
 /*                        Medicine Collection Read Data                       */
 /* -------------------------------------------------------------------------- */
-  Stream<List<MedicineModel>> readMedicineCategory() {
-    return FirebaseFirestore.instance.collection('medicine').snapshots().map(
-        (snapshots) => snapshots.docs
-            .map((doc) => MedicineModel.fromMap(doc.data()))
+  Stream<List<StockModel>> readMedicineCategory() {
+    return FirebaseFirestore.instance
+        .collection('stock')
+        .where('itemCategory', isEqualTo: 'medicine')
+        .snapshots()
+        .map((snapshots) => snapshots.docs
+            .map((doc) => StockModel.fromMap(doc.data()))
             .toList());
   }
 
@@ -81,24 +85,26 @@ class AddMedicineScreenController extends GetxController {
   sendData() async {
     if ((formKey.currentState!.validate()) || image != null) {
       final fileName = basename(image!.path);
-      var storageImage = FirebaseStorage.instance.ref('medicine/$fileName');
+      var storageImage =
+          FirebaseStorage.instance.ref('stock/medicine/$fileName');
       var task = storageImage.putFile(image!);
       imageUrl = await (await task).ref.getDownloadURL();
 
-      final docRef = FirebaseFirestore.instance.collection("medicine").doc();
+      final docRef = FirebaseFirestore.instance.collection("stock").doc();
 
-      medicineModel.medicineName = medicineNameController.text;
-      medicineModel.imageUrl = imageUrl;
-      medicineModel.medicinePrice = int.parse(medicinePriceController.text);
-      medicineModel.quantity = int.parse(medicineQuantityController.text);
-      medicineModel.petCategory = selectedCategory;
-      medicineModel.medicineDescription = medicineDescriptionController.text;
-      medicineModel.medicineId = docRef.id;
+      stockModel.itemName = medicineNameController.text;
+      stockModel.itemImageUrl = imageUrl;
+      stockModel.itemPrice = int.parse(medicinePriceController.text);
+      stockModel.itemQuantity = int.parse(medicineQuantityController.text);
+      stockModel.petCategory = selectedCategory;
+      stockModel.itemCategory = 'medicine';
+      stockModel.itemDescription = medicineDescriptionController.text;
+      stockModel.itemId = docRef.id;
 
       await firebaseFirestore
-          .collection('medicine')
+          .collection('stock')
           .doc(docRef.id)
-          .set(medicineModel.toMap());
+          .set(stockModel.toMap());
       formKey.currentState!.reset();
       image = null;
       medicineNameController.clear();
@@ -114,9 +120,8 @@ class AddMedicineScreenController extends GetxController {
 /* -------------------------------------------------------------------------- */
 /*                                   Delete                                   */
 /* -------------------------------------------------------------------------- */
-  void deleteMedicine(MedicineModel index1) async {
-    final medicine =
-        firebaseFirestore.collection("medicine").doc(index1.medicineId);
+  void deleteMedicine(StockModel index1) async {
+    final medicine = firebaseFirestore.collection("stock").doc(index1.itemId);
     medicine.delete();
     update();
   }
@@ -124,23 +129,23 @@ class AddMedicineScreenController extends GetxController {
   /* -------------------------------------------------------------------------- */
   /*                               Update Medicine                              */
   /* -------------------------------------------------------------------------- */
-  void updateCategory(MedicineModel index1) async {
+  void updateCategory(StockModel index1) async {
     final fileName = basename(image!.path);
-    var storageImage = FirebaseStorage.instance.ref('medicine/$fileName');
+    var storageImage = FirebaseStorage.instance.ref('stock/medicine/$fileName');
     var task = storageImage.putFile(image!);
     imageUrl = await (await task).ref.getDownloadURL();
     // final category = firebaseFirestore.collection("category").doc('uid');
-    final medicine =
-        firebaseFirestore.collection("medicine").doc(index1.medicineId);
+    final medicine = firebaseFirestore.collection("stock").doc(index1.itemId);
 
-    medicineModel.medicineName = medicineNameController.text;
-    medicineModel.imageUrl = imageUrl;
-    medicineModel.medicinePrice = int.parse(medicinePriceController.text);
-    medicineModel.quantity = int.parse(medicineQuantityController.text);
-    medicineModel.petCategory = selectedCategory;
-    medicineModel.medicineDescription = medicineDescriptionController.text;
+    stockModel.itemName = medicineNameController.text;
+    stockModel.itemImageUrl = imageUrl;
+    stockModel.itemPrice = int.parse(medicinePriceController.text);
+    stockModel.itemQuantity = int.parse(medicineQuantityController.text);
+    stockModel.petCategory = selectedCategory;
+    stockModel.itemCategory = 'medicine';
+    stockModel.itemDescription = medicineDescriptionController.text;
 
-    await medicine.update(medicineModel.toMap());
+    await medicine.update(stockModel.toMap());
 
     // category.update({
     //   'title': titleController.text,

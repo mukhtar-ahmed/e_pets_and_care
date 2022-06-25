@@ -1,4 +1,5 @@
 import 'package:e_pets_and_care/Admin/FoodManagement/Controller/add_food_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/FoodManagement/Controller/food_screen_controller.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
@@ -15,9 +16,9 @@ class AddFoodScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AddFoodScreenController>(
-        init: AddFoodScreenController(),
-        builder: (addFoodScreenController) {
+    return GetBuilder<FoodScreenController>(
+        init: FoodScreenController(),
+        builder: (foodScreenController) {
           return Scaffold(
               appBar: AppBar(
                 // ignore: prefer_const_constructors
@@ -38,7 +39,7 @@ class AddFoodScreen extends StatelessWidget {
                   ),
                   height: 812.h,
                   child: Form(
-                    key: addFoodScreenController.formKey,
+                    key: foodScreenController.formKey,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.w),
                       child: Column(
@@ -53,27 +54,6 @@ class AddFoodScreen extends StatelessWidget {
                               SizedBox(
                                 height: 50.h,
                               ),
-                              Text(
-                                addFoodScreenController.isActive
-                                    ? 'Active'
-                                    : 'Inactive',
-                                style: TextStyle(
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w900),
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              FlutterSwitch(
-                                width: 100.w,
-                                height: 35.h,
-                                valueFontSize: 25.0,
-                                toggleSize: 45.0,
-                                value: addFoodScreenController.isActive,
-                                onToggle: (val) {
-                                  addFoodScreenController.updateActive(val);
-                                },
-                              ),
                             ],
                           ),
                           SizedBox(
@@ -84,15 +64,14 @@ class AddFoodScreen extends StatelessWidget {
                           CircleAvatar(
                             radius: 80.r,
                             // ignore: unnecessary_cast
-                            backgroundImage: addFoodScreenController.image !=
-                                    null
-                                ? FileImage(addFoodScreenController.image!)
+                            backgroundImage: foodScreenController.image != null
+                                ? FileImage(foodScreenController.image!)
                                 : const NetworkImage("null") as ImageProvider,
                             // ignore: prefer_const_literals_to_create_immutables
                             child: Stack(children: [
                               // ignore: prefer_const_constructors
                               GestureDetector(
-                                onTap: addFoodScreenController.selectFile,
+                                onTap: foodScreenController.selectFile,
                                 child: Align(
                                   alignment: Alignment.bottomRight,
                                   child: CircleAvatar(
@@ -125,9 +104,9 @@ class AddFoodScreen extends StatelessWidget {
                           ),
                           CustomeTextFormField(
                             defaultControllerText:
-                                addFoodScreenController.foodNameController.text,
+                                foodScreenController.foodNameController.text,
                             textController:
-                                addFoodScreenController.foodNameController,
+                                foodScreenController.foodNameController,
                             isObscure: false,
                             validate: (value) {
                               if (value != null && value.isNotEmpty) {
@@ -158,16 +137,48 @@ class AddFoodScreen extends StatelessWidget {
                           ),
                           CustomeTextFormField(
                             keyboardType: TextInputType.number,
-                            defaultControllerText: addFoodScreenController
-                                .foodPriceController.text,
+                            defaultControllerText:
+                                foodScreenController.foodPriceController.text,
                             textController:
-                                addFoodScreenController.foodPriceController,
+                                foodScreenController.foodPriceController,
                             isObscure: false,
                             validate: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter the Price';
                               } else if (int.parse(value) < 0) {
                                 return 'Price must be Greater than 0';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          /* -------------------------------------------------------------------------- */
+                          /*                               Total Quantity                               */
+                          /* -------------------------------------------------------------------------- */
+                          CustomeTextFieldLabel(
+                            labelText: "Food Quantity",
+                            textAlign: TextAlign.start,
+                            fontSized: 14.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(
+                            height: 6.h,
+                          ),
+                          CustomeTextFormField(
+                            keyboardType: TextInputType.number,
+                            defaultControllerText: foodScreenController
+                                .foodQuantityController.text,
+                            textController:
+                                foodScreenController.foodQuantityController,
+                            isObscure: false,
+                            validate: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter the Quantity';
+                              } else if (int.parse(value) < 0) {
+                                return 'Quantity must be Greater than 0';
                               }
                               return null;
                             },
@@ -189,40 +200,39 @@ class AddFoodScreen extends StatelessWidget {
                             height: 6.h,
                           ),
                           StreamBuilder<List<PetCategoryScreenModel>>(
-                            stream: addFoodScreenController.readCategory(),
+                            stream: foodScreenController.readCategory(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return const Center(
                                   child: CupertinoActivityIndicator(),
                                 );
                               } else if (snapshot.hasData) {
-                                addFoodScreenController.categoryIten!.clear();
+                                foodScreenController.categoryIten!.clear();
                                 for (int i = 0;
                                     i < snapshot.data!.length;
                                     i++) {
-                                  addFoodScreenController.index =
+                                  foodScreenController.index =
                                       snapshot.data![i];
 
-                                  addFoodScreenController.categoryIten!.add(
+                                  foodScreenController.categoryIten!.add(
                                     DropdownMenuItem(
                                       child: Text(
-                                        addFoodScreenController.index.petName
+                                        foodScreenController.index.petName
                                             .toString(),
                                       ),
-                                      value: addFoodScreenController
-                                          .index.petName
+                                      value: foodScreenController.index.petName
                                           .toString(),
                                     ),
                                   );
                                 }
                               }
                               return DropdownButtonFormField<dynamic>(
-                                items: addFoodScreenController.categoryIten,
+                                items: foodScreenController.categoryIten,
                                 onChanged: (categoryValue) {
-                                  addFoodScreenController
+                                  foodScreenController
                                       .updateMenuValue(categoryValue);
                                 },
-                                value: addFoodScreenController.selectedCategory,
+                                value: foodScreenController.selectedCategory,
                                 validator: (value) =>
                                     value == null ? 'field required' : null,
                                 isExpanded: true,
@@ -245,8 +255,8 @@ class AddFoodScreen extends StatelessWidget {
                             height: 6.h,
                           ),
                           TextFormField(
-                            controller: addFoodScreenController
-                                .foodDescriptionController,
+                            controller:
+                                foodScreenController.foodDescriptionController,
                             maxLines: 3,
                             validator: (value) {
                               if (value != null && value.isNotEmpty) {
@@ -271,7 +281,7 @@ class AddFoodScreen extends StatelessWidget {
                             buttonText: 'Save',
                             horPadding: 50,
                             onPressed: () {
-                              addFoodScreenController.sendData();
+                              foodScreenController.sendData();
                             },
                           ),
                         ],

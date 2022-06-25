@@ -1,18 +1,11 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'package:e_pets_and_care/Admin/CategoryManagement/Model/category_screen_model.dart';
-import 'package:e_pets_and_care/Admin/FoodManagement/Controller/add_food_screen_controller.dart';
-import 'package:e_pets_and_care/Admin/FoodManagement/Model/food_model.dart';
-import 'package:e_pets_and_care/Admin/MedicineManagement/Controller/add_medicine_screen_controller.dart';
-import 'package:e_pets_and_care/Admin/MedicineManagement/Model/medicine_model.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
-import 'package:e_pets_and_care/Admin/PetManagement/Controller/add_pet_screen_controller.dart';
-import 'package:e_pets_and_care/Admin/PetManagement/Model/pet_model.dart';
-import 'package:e_pets_and_care/Controller/home_screen_controller.dart';
+import 'package:e_pets_and_care/Admin/stock_model.dart';
+import 'package:e_pets_and_care/Controller/home_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
-import 'package:e_pets_and_care/view/screens/food_details_screen.dart';
-import 'package:e_pets_and_care/view/screens/medicine_details_screen.dart';
-import 'package:e_pets_and_care/view/screens/pet_details_screen.dart';
+import 'package:e_pets_and_care/view/screens/item_details_screen.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,9 +18,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
-    return GetBuilder<HomeScreenController>(
-        init: HomeScreenController(),
-        builder: (homeScreenController) {
+    return GetBuilder<HomeController>(
+        init: HomeController(),
+        builder: (homeController) {
           return Scaffold(
             backgroundColor: Colors.grey[300],
             body: SingleChildScrollView(
@@ -39,74 +32,38 @@ class HomeScreen extends StatelessWidget {
                       height: 10.h,
                     ),
                     /* -------------------------------------------------------------------------- */
-                    /*                            Search Field And Cart                           */
+                    /*                                Main Category                               */
                     /* -------------------------------------------------------------------------- */
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 280.w,
-                            decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  suffixIcon: const Icon(
-                                    Icons.search,
-                                    color: Colors.black,
-                                  ),
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 10.w, vertical: 10.h),
-                                  hintText: "Search here"),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          SizedBox(
-                            width: 50.w,
-                            child: IconButton(
-                              onPressed: () {
-                                //homeScreenController.updateOnPressed();
-                              },
-                              icon: Icon(
-                                Icons.shopping_cart,
-                                color: homeScreenController.a
-                                    ? Colors.blue
-                                    : Colors.red,
-                                size: 30,
-                              ),
-                            ),
-                          )
-                        ],
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: 180.w,
+                      height: 40.w,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(60.r),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 14.w),
+                        child: Text(
+                          'Main Category',
+                          style: TextStyle(
+                              color: kWhiteColor,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w900),
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 10.h,
-                    ),
-                    /* -------------------------------------------------------------------------- */
-                    /*                                Main Category                               */
-                    /* -------------------------------------------------------------------------- */
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      child: Text(
-                        'Main Categories',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20.sp),
-                      ),
+                      height: 8.h,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 14.w),
                       child: SizedBox(
                         height: 90.h,
                         child: StreamBuilder<List<CategoryScreenModel>>(
-                            stream: homeScreenController.readCategory(),
+                            stream: homeController.readCategory(),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
                                 return const SpinKitDoubleBounce(
@@ -114,8 +71,7 @@ class HomeScreen extends StatelessWidget {
                                   size: 30.0,
                                 );
                               } else if (snapshot.hasData) {
-                                homeScreenController.categoryData =
-                                    snapshot.data!;
+                                homeController.categoryData = snapshot.data!;
                                 return ListView.separated(
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -129,17 +85,17 @@ class HomeScreen extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          homeScreenController
+                                          homeController
                                               .updateMainCategoryOnPressed(
                                                   snapshot.data![index]);
-                                          homeScreenController
+                                          homeController
                                               .updateMainCategoryIndex(index);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: snapshot
                                                         .data![index].title ==
-                                                    homeScreenController
+                                                    homeController
                                                         .mainCategoryOnPressed
                                                 ? kPrimaryColor
                                                 : kWhiteColor,
@@ -162,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                                                     vertical: 10.h),
                                                 /* ------------------------------ Category Icon ----------------------------- */
                                                 child: Image.network(
-                                                  homeScreenController
+                                                  homeController
                                                       .categoryData[index]
                                                       .imageUrl
                                                       .toString(),
@@ -175,7 +131,7 @@ class HomeScreen extends StatelessWidget {
                                               ),
                                               /* ------------------------------ Category Name ----------------------------- */
                                               Text(
-                                                homeScreenController
+                                                homeController
                                                     .categoryData[index].title!,
                                                 //snapshot.data![index].title!,
                                               )
@@ -198,12 +154,25 @@ class HomeScreen extends StatelessWidget {
                       height: 10.h,
                     ),
                     /* ------------------------------ Category Text ----------------------------- */
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      child: Text(
-                        'Pets Categories',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20.sp),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: 180.w,
+                      height: 40.w,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(60.r),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 14.w),
+                        child: Text(
+                          'Pets Category',
+                          style: TextStyle(
+                              color: kWhiteColor,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w900),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -217,13 +186,12 @@ class HomeScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 105.h,
                         child: StreamBuilder<List<PetCategoryScreenModel>>(
-                          stream: homeScreenController.readPetCategory(),
+                          stream: homeController.readPetCategory(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
                               return const Text('Some Thing Wrong');
                             } else if (snapshot.hasData) {
-                              homeScreenController.petCategoryData =
-                                  snapshot.data!;
+                              homeController.petCategoryData = snapshot.data!;
                               return ListView.separated(
                                   separatorBuilder:
                                       (BuildContext context, int index) {
@@ -232,26 +200,23 @@ class HomeScreen extends StatelessWidget {
                                     );
                                   },
                                   shrinkWrap: true,
-                                  itemCount: homeScreenController
-                                      .petCategoryData.length,
+                                  itemCount:
+                                      homeController.petCategoryData.length,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        homeScreenController
+                                        homeController
                                             .updatePetCategoryOnPressed(
                                                 snapshot.data![index]);
-                                        homeScreenController
+                                        homeController
                                             .updatePetCategoryIndex(index);
-
-                                        print(homeScreenController
-                                            .petCategoryIndex);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color:
                                               snapshot.data![index].petName ==
-                                                      homeScreenController
+                                                      homeController
                                                           .petCategoryOnPressed
                                                   ? kPrimaryColor
                                                   : kWhiteColor,
@@ -274,7 +239,7 @@ class HomeScreen extends StatelessWidget {
                                                   vertical: 10.h),
                                               /* ------------------------------ Category Icon ----------------------------- */
                                               child: Image.network(
-                                                homeScreenController
+                                                homeController
                                                     .petCategoryData[index]
                                                     .imageUrl
                                                     .toString(),
@@ -284,7 +249,7 @@ class HomeScreen extends StatelessWidget {
                                               width: 50,
                                             ),
                                             /* ------------------------------ Category Name ----------------------------- */
-                                            Text(homeScreenController
+                                            Text(homeController
                                                 .petCategoryData[index]
                                                 .petName!)
                                           ],
@@ -310,12 +275,28 @@ class HomeScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                             Pets Medicine Text                             */
                     /* -------------------------------------------------------------------------- */
-                    homeScreenController.mainCategoryIndex == 0 ||
-                            homeScreenController.mainCategoryIndex == -1
-                        ? Text(
-                            'Pets Medicine',
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.w900),
+                    homeController.mainCategoryIndex == 0 ||
+                            homeController.mainCategoryIndex == -1
+                        ? Container(
+                            alignment: Alignment.centerLeft,
+                            width: 180.w,
+                            height: 40.w,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(60.r),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 14.w),
+                              child: Text(
+                                'Pets Medicine',
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ),
                           )
                         : Container(),
                     SizedBox(
@@ -325,10 +306,10 @@ class HomeScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                                Pets Medicine                               */
                     /* -------------------------------------------------------------------------- */
-                    homeScreenController.mainCategoryIndex == 0 ||
-                            homeScreenController.mainCategoryIndex == -1
-                        ? StreamBuilder<List<MedicineModel>>(
-                            stream: homeScreenController.readMedicineCategory(),
+                    homeController.mainCategoryIndex == 0 ||
+                            homeController.mainCategoryIndex == -1
+                        ? StreamBuilder<List<StockModel>>(
+                            stream: homeController.readMedicineCategory(),
                             builder: (context, snapShort) {
                               if (snapShort.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -361,12 +342,36 @@ class HomeScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                                  Pet Food    Text                          */
                     /* -------------------------------------------------------------------------- */
-                    homeScreenController.mainCategoryIndex == 1 ||
-                            homeScreenController.mainCategoryIndex == -1
-                        ? Text(
-                            'Pets Food',
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.w900),
+                    homeController.mainCategoryIndex == 1 ||
+                            homeController.mainCategoryIndex == -1
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 8.h,
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 180.w,
+                                height: 40.w,
+                                decoration: BoxDecoration(
+                                  color: kPrimaryColor,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(60.r),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 14.w),
+                                  child: Text(
+                                    'Pets Food',
+                                    style: TextStyle(
+                                        color: kWhiteColor,
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                         : Container(),
                     SizedBox(
@@ -376,10 +381,10 @@ class HomeScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                                Pets     Food                               */
                     /* -------------------------------------------------------------------------- */
-                    homeScreenController.mainCategoryIndex == 1 ||
-                            homeScreenController.mainCategoryIndex == -1
-                        ? StreamBuilder<List<FoodModel>>(
-                            stream: homeScreenController.readFoodCategory(),
+                    homeController.mainCategoryIndex == 1 ||
+                            homeController.mainCategoryIndex == -1
+                        ? StreamBuilder<List<StockModel>>(
+                            stream: homeController.readFoodCategory(),
                             builder: (context, snapShort) {
                               if (snapShort.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -412,12 +417,36 @@ class HomeScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                                  Pet Text                                  */
                     /* -------------------------------------------------------------------------- */
-                    homeScreenController.mainCategoryIndex == 2 ||
-                            homeScreenController.mainCategoryIndex == -1
-                        ? Text(
-                            'Pets',
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.w900),
+                    homeController.mainCategoryIndex == 2 ||
+                            homeController.mainCategoryIndex == -1
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 8.h,
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 180.w,
+                                height: 40.w,
+                                decoration: BoxDecoration(
+                                  color: kPrimaryColor,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(60.r),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 14.w),
+                                  child: Text(
+                                    'Pets',
+                                    style: TextStyle(
+                                        color: kWhiteColor,
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                         : Container(),
                     SizedBox(
@@ -427,10 +456,10 @@ class HomeScreen extends StatelessWidget {
                     /* -------------------------------------------------------------------------- */
                     /*                                Pets                                        */
                     /* -------------------------------------------------------------------------- */
-                    homeScreenController.mainCategoryIndex == 2 ||
-                            homeScreenController.mainCategoryIndex == -1
-                        ? StreamBuilder<List<PetModel>>(
-                            stream: homeScreenController.readPet(),
+                    homeController.mainCategoryIndex == 2 ||
+                            homeController.mainCategoryIndex == -1
+                        ? StreamBuilder<List<StockModel>>(
+                            stream: homeController.readPet(),
                             builder: (context, snapShort) {
                               if (snapShort.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -471,7 +500,7 @@ class HomeScreen extends StatelessWidget {
 /* -------------------------------------------------------------------------- */
 /*                             Medicine Container                             */
 /* -------------------------------------------------------------------------- */
-  Widget buildMedicineContainer({MedicineModel? index1}) {
+  Widget buildMedicineContainer({StockModel? index1}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       child: Container(
@@ -492,14 +521,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(MedicineDetailsScreen.id, arguments: index1);
+                    Get.toNamed(ItemDetailsScreen.id, arguments: index1);
                   },
                   child: SizedBox(
                     height: 126.h,
                     child: Image(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        index1!.imageUrl.toString(),
+                        index1!.itemImageUrl.toString(),
                       ),
                     ),
                   ),
@@ -516,59 +545,60 @@ class HomeScreen extends StatelessWidget {
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10)),
                   ),
-                  height: 81.h,
+                  height: 86.h,
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       /* ----------------------------- Name Of Product ---------------------------- */
                       CustomeTextFieldLabel(
-                        labelText: index1.medicineName!,
+                        labelText: index1.itemName!,
                         textAlign: TextAlign.start,
                         fontSized: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
+                        maxLine: 2,
                       ),
                       SizedBox(
                         height: 4.h,
                       ),
                       /* ------------------------- Review and total order ------------------------- */
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                            size: 14.sp,
-                          ),
-                          SizedBox(
-                            width: 4.w,
-                          ),
-                          const Text(
-                            '4.0',
-                            style: TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Text('12'),
-                          SizedBox(
-                            width: 4.w,
-                          ),
-                          Text(
-                            'Reviews',
-                            style: TextStyle(fontSize: 12.sp),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4.h,
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Icon(
+                      //       Icons.star,
+                      //       color: Colors.yellow,
+                      //       size: 14.sp,
+                      //     ),
+                      //     SizedBox(
+                      //       width: 4.w,
+                      //     ),
+                      //     const Text(
+                      //       '4.0',
+                      //       style: TextStyle(fontWeight: FontWeight.w800),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 10.w,
+                      //     ),
+                      //     Text('12'),
+                      //     SizedBox(
+                      //       width: 4.w,
+                      //     ),
+                      //     Text(
+                      //       'Reviews',
+                      //       style: TextStyle(fontSize: 12.sp),
+                      //     )
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 4.h,
+                      // ),
                       /* ----------------------------- Price and Cart ----------------------------- */
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'RS: ${index1.medicinePrice}',
+                            'RS: ${index1.itemPrice}',
                             style: TextStyle(
                                 fontSize: 18.sp, fontWeight: FontWeight.w900),
                           ),
@@ -596,7 +626,7 @@ class HomeScreen extends StatelessWidget {
 /* -------------------------------------------------------------------------- */
 /*                                Pet Container                               */
 /* -------------------------------------------------------------------------- */
-  Widget buildPetContainer({PetModel? index1}) {
+  Widget buildPetContainer({StockModel? index1}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       child: Container(
@@ -617,14 +647,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(PetDetailsScreen.id, arguments: index1);
+                    Get.toNamed(ItemDetailsScreen.id, arguments: index1);
                   },
                   child: SizedBox(
                     height: 126.h,
                     child: Image(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        index1!.imageUrl.toString(),
+                        index1!.itemImageUrl.toString(),
                       ),
                     ),
                   ),
@@ -641,14 +671,14 @@ class HomeScreen extends StatelessWidget {
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10)),
                   ),
-                  height: 81.h,
+                  height: 86.h,
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       /* ----------------------------- Name Of Product ---------------------------- */
                       CustomeTextFieldLabel(
-                        labelText: index1.petName!,
+                        labelText: index1.itemName!,
                         textAlign: TextAlign.start,
                         fontSized: 14.sp,
                         color: Colors.black,
@@ -693,7 +723,7 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'RS: ${index1.petPrice}',
+                            'RS: ${index1.itemPrice}',
                             style: TextStyle(
                                 fontSize: 18.sp, fontWeight: FontWeight.w900),
                           ),
@@ -721,7 +751,7 @@ class HomeScreen extends StatelessWidget {
 /* -------------------------------------------------------------------------- */
 /*                               Food Container                               */
 /* -------------------------------------------------------------------------- */
-  Widget buildFoodContainer({FoodModel? index1}) {
+  Widget buildFoodContainer({StockModel? index1}) {
     return index1 == null
         ? SizedBox()
         : Padding(
@@ -744,14 +774,14 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.toNamed(FoodDetailsScreen.id, arguments: index1);
+                          Get.toNamed(ItemDetailsScreen.id, arguments: index1);
                         },
                         child: SizedBox(
                           height: 126.h,
                           child: Image(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                              index1.imageUrl.toString(),
+                              index1.itemImageUrl.toString(),
                             ),
                           ),
                         ),
@@ -768,7 +798,7 @@ class HomeScreen extends StatelessWidget {
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10)),
                         ),
-                        height: 81.h,
+                        height: 86.h,
                         padding: EdgeInsets.symmetric(
                             horizontal: 8.w, vertical: 5.h),
                         child: Column(
@@ -776,7 +806,7 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             /* ----------------------------- Name Of Product ---------------------------- */
                             CustomeTextFieldLabel(
-                              labelText: index1.foodName!,
+                              labelText: index1.itemName!,
                               textAlign: TextAlign.start,
                               fontSized: 14.sp,
                               color: Colors.black,
@@ -821,7 +851,7 @@ class HomeScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'RS: ${index1.foodPrice}',
+                                  'RS: ${index1.itemPrice}',
                                   style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w900),
