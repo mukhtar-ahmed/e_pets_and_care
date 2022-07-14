@@ -1,11 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/Controller/checkout_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -93,6 +92,8 @@ class CheckoutScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w600,
                                             ),
                                             TextFormField(
+                                              controller: checkoutController
+                                                  .addressController,
                                               maxLines: 3,
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder()),
@@ -105,7 +106,18 @@ class CheckoutScreen extends StatelessWidget {
                                               fontColor: Colors.white,
                                               buttonText: 'Sava',
                                               horPadding: 15,
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                checkoutController
+                                                    .firebaseFirestore
+                                                    .collection('address')
+                                                    .doc('uid')
+                                                    .update({
+                                                  'location': checkoutController
+                                                      .addressController.text
+                                                      .trim()
+                                                });
+                                                Get.back();
+                                              },
                                             )
                                           ],
                                         ),
@@ -113,12 +125,18 @@ class CheckoutScreen extends StatelessWidget {
                                     ),
                                   );
                                 },
-                                child: Text(
-                                  'Edit Address',
-                                  style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 20.sp),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  color: kPrimaryColor,
+                                  padding: EdgeInsets.all(4.0),
+                                  width: 120.w,
+                                  child: Text(
+                                    'New Address',
+                                    style: TextStyle(
+                                        color: kWhiteColor,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 14.sp),
+                                  ),
                                 ),
                               )
                             ],
@@ -128,7 +146,19 @@ class CheckoutScreen extends StatelessWidget {
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Text('abc.abc'),
+                            child: FutureBuilder<DocumentSnapshot>(
+                                future: checkoutController.firebaseFirestore
+                                    .collection('address')
+                                    .doc('uid')
+                                    .get(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Text("Loading...");
+                                  }
+
+                                  return Text(snapshot.data!['location']);
+                                }),
                           )
                         ],
                       ),
@@ -258,6 +288,40 @@ class CheckoutScreen extends StatelessWidget {
                   ),
                   /* -------------------------------------------------------------------------- */
                   /*                               Bag Summary End                              */
+                  /* -------------------------------------------------------------------------- */
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  /* -------------------------------------------------------------------------- */
+                  /*                            Buy Now Button Start                            */
+                  /* -------------------------------------------------------------------------- */
+                  CustomeButton(
+                    buttonColor: kPrimaryColor,
+                    fontColor: kWhiteColor,
+                    buttonText: 'Buy Now',
+                    horPadding: 25,
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text('Order Update'),
+                                content: Text('Your Order Place Successfully'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      /* -------------------------------------------------------------------------- */
+                                      /*                                      .                                     */
+                                      /* -------------------------------------------------------------------------- */
+                                      Get.back();
+                                    },
+                                    child: Text('Ok'),
+                                  )
+                                ],
+                              ));
+                    },
+                  ),
+                  /* -------------------------------------------------------------------------- */
+                  /*                             Buy Now Button End                             */
                   /* -------------------------------------------------------------------------- */
                 ],
               ),

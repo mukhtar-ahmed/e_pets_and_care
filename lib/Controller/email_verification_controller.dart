@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:e_pets_and_care/Controller/registration_screen_controller.dart';
+import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
 import 'package:e_pets_and_care/view/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -49,9 +50,8 @@ class EmailVerificationController extends GetxController {
     isEmailVarified = FirebaseAuth.instance.currentUser!.emailVerified;
     update();
     if (isEmailVarified) {
-      Get.toNamed(HomeScreen.id);
+      Get.toNamed(BottomNavigationBars.id);
       timer?.cancle();
-      
     }
   }
 

@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CheckoutController extends GetxController {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   List<int> productTotalPrice = [];
+  final TextEditingController addressController = TextEditingController();
   //int total = 0;
   @override
   void onInit() {
@@ -22,6 +24,7 @@ class CheckoutController extends GetxController {
   //   total = a;
   //   update();
   // }
+  
 
   Stream<List<CartModel>> readCart() {
     return FirebaseFirestore.instance.collection('cart').snapshots().map(
