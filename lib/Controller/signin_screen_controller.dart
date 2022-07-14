@@ -23,6 +23,7 @@ class SigninScreenController extends GetxController {
         .get();
     final role = snap['role'];
     if (role == 'user') {
+      //dddd
       return Get.toNamed(BottomNavigationBars.id);
     } else {
       return Get.toNamed(BottomAdminNavigationBar.id);
