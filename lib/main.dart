@@ -4,6 +4,9 @@ import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/add_medic
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category.dart';
 import 'package:e_pets_and_care/Admin/Dashboard/Views/Screens/bottom_admin_navigation_bar.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/add_pet_screen.dart';
+import 'package:e_pets_and_care/Admin/PetSupplierManagement/Views/Screens/add_supplier_screen.dart';
+import 'package:e_pets_and_care/Admin/PetSupplierManagement/Views/Screens/supplier.dart';
+import 'package:e_pets_and_care/Admin/PetSupplierManagement/Views/Screens/supplier_screen.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
 import 'package:e_pets_and_care/view/screens/cart_screen.dart';
@@ -53,7 +56,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: kPrimaryColor,
         ),
         // ignore: prefer_const_constructors
-        home: FirstScreen(),
+        home: SupplierScreen(),
         getPages: [
           GetPage(
               name: EditProfileScreen.id,
@@ -100,6 +103,10 @@ class MyApp extends StatelessWidget {
               page: () => const AddMedicineScreen()),
           GetPage(name: AddFoodScreen.id, page: () => const AddFoodScreen()),
           GetPage(name: AddPetScreen.id, page: () => const AddPetScreen()),
+          GetPage(
+              name: AddSupplierScreen.id,
+              page: () => const AddSupplierScreen()),
+          GetPage(name: Supplier.id, page: () => const Supplier()),
         ],
       ),
       designSize: const Size(375, 812),

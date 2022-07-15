@@ -18,90 +18,93 @@ class UserScreen extends StatelessWidget {
             appBar: AppBar(
               title: Text('User Management'),
             ),
-            body: StreamBuilder<List<UserModel>>(
-              stream: userScreenController.readUserRoleUser(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Text('Some Thing Wrong');
-                } else if (snapshot.hasData) {
-                  return Column(
-                    children: [
-                      /* -------------------------------------------------------------------------- */
-                      /*                                Search Field                                */
-                      /* -------------------------------------------------------------------------- */
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                        padding: const EdgeInsets.fromLTRB(15, 3, 0, 3),
-                        decoration: const BoxDecoration(
-                          color: Color(0xffEDF0F4),
-                          // color: Colors.red,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
+            body: SingleChildScrollView(
+              child: StreamBuilder<List<UserModel>>(
+                stream: userScreenController.readUserRoleUser(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Text('Some Thing Wrong');
+                  } else if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        /* -------------------------------------------------------------------------- */
+                        /*                                Search Field                                */
+                        /* -------------------------------------------------------------------------- */
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                          padding: const EdgeInsets.fromLTRB(15, 3, 0, 3),
+                          decoration: const BoxDecoration(
+                            color: Color(0xffEDF0F4),
+                            // color: Colors.red,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: TextFormField(
+                            controller: userScreenController.searchController,
+                            decoration: InputDecoration(
+                              // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+                              hintText: 'Search',
+                              border: InputBorder.none,
+                              suffixIcon: IconButton(
+                                  icon: const Icon(FontAwesomeIcons.xmark),
+                                  onPressed: () {}),
+                            ),
+                            onChanged: (String query) {
+                              textfieldtext = userScreenController
+                                  .searchController.text
+                                  .trim();
+                              final suggestions =
+                                  snapshot.data!.where((categoryfilter) {
+                                final categoryTitle =
+                                    categoryfilter.fullName!.toLowerCase();
+                                final input = query.toLowerCase();
+                                return categoryTitle.contains(input);
+                              }).toList();
+                              userScreenController.addFill(suggestions);
+                              // setState(() {
+                              //   addMedicineScreenController.fil =
+                              //       suggestions;
+                              // });
+                            },
                           ),
                         ),
-                        child: TextFormField(
-                          controller: userScreenController.searchController,
-                          decoration: InputDecoration(
-                            // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
-                            hintText: 'Search',
-                            border: InputBorder.none,
-                            suffixIcon: IconButton(
-                                icon: const Icon(FontAwesomeIcons.xmark),
-                                onPressed: () {}),
-                          ),
-                          onChanged: (String query) {
-                            textfieldtext = userScreenController
-                                .searchController.text
-                                .trim();
-                            final suggestions =
-                                snapshot.data!.where((categoryfilter) {
-                              final categoryTitle =
-                                  categoryfilter.fullName!.toLowerCase();
-                              final input = query.toLowerCase();
-                              return categoryTitle.contains(input);
-                            }).toList();
-                            userScreenController.addFill(suggestions);
-                            // setState(() {
-                            //   addMedicineScreenController.fil =
-                            //       suggestions;
-                            // });
-                          },
-                        ),
-                      ),
 
-                      /* -------------------------------------------------------------------------- */
-                      /*                              Search Field End                              */
-                      /* -------------------------------------------------------------------------- */
+                        /* -------------------------------------------------------------------------- */
+                        /*                              Search Field End                              */
+                        /* -------------------------------------------------------------------------- */
 
-                      GridView.builder(
-                          itemCount: userScreenController.searchController.text
-                                      .trim() !=
-                                  ''
-                              ? userScreenController.fil.length
-                              : snapshot.data!.length,
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 0,
-                                  crossAxisCount: 1,
-                                  mainAxisExtent: 120),
-                          itemBuilder: (BuildContext context, index) {
-                            return buildUserContainer(
-                                index1: userScreenController
-                                            .searchController.text
-                                            .trim() !=
-                                        ''
-                                    ? userScreenController.fil[index]
-                                    : snapshot.data![index]);
-                          }),
-                    ],
-                  );
-                } else {
-                  return const Center(child: CircleAvatar());
-                }
-              },
+                        GridView.builder(
+                            itemCount: userScreenController
+                                        .searchController.text
+                                        .trim() !=
+                                    ''
+                                ? userScreenController.fil.length
+                                : snapshot.data!.length,
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 0,
+                                    crossAxisCount: 1,
+                                    mainAxisExtent: 150),
+                            itemBuilder: (BuildContext context, index) {
+                              return buildUserContainer(
+                                  index1: userScreenController
+                                              .searchController.text
+                                              .trim() !=
+                                          ''
+                                      ? userScreenController.fil[index]
+                                      : snapshot.data![index]);
+                            }),
+                      ],
+                    );
+                  } else {
+                    return const Center(child: CircleAvatar());
+                  }
+                },
+              ),
             ),
           );
         });
@@ -114,7 +117,6 @@ class UserScreen extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
             child: Container(
-                height: 120.h,
                 width: double.infinity,
                 padding: EdgeInsets.all(10.sp),
                 decoration: BoxDecoration(border: Border.all()),
@@ -143,9 +145,11 @@ class UserScreen extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.w900),
                         ),
-                        Text(
-                          index1.email.toString(),
-                          style: TextStyle(fontSize: 20.sp),
+                        Flexible(
+                          child: Text(
+                            index1.email.toString(),
+                            style: TextStyle(fontSize: 20.sp),
+                          ),
                         ),
                       ],
                     ),
