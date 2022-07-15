@@ -3,10 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-
 import '../Model/supplier_ model.dart';
 
 class SupplierController extends GetxController
@@ -18,22 +16,14 @@ class SupplierController extends GetxController
   TextEditingController supplierNameController = TextEditingController();
   TextEditingController supplierCompanyController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
- 
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance; 
   SupplierModel supplierModel = SupplierModel();
   List<SupplierModel> fil = [];
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   addFill(suggestions) {
     fil = suggestions;
     update();
   }
-
-  
 
   sendData() async {
     if (formKey.currentState!.validate()) {
@@ -41,15 +31,11 @@ class SupplierController extends GetxController
       var storageImage = FirebaseStorage.instance.ref('petSupplier/$fileName');
       var task = storageImage.putFile(image!);
       imageUrl = await (await task).ref.getDownloadURL();
-
       final docRef = FirebaseFirestore.instance.collection("petSupplier").doc();
-
       supplierModel.supplierName = supplierNameController.text;
-
       supplierModel.imageUrl = imageUrl;
       supplierModel.supplierCompany = supplierCompanyController.text;
       supplierModel.supplier_id = docRef.id;
-
       await firebaseFirestore
           .collection('petSupplier')
           .doc(docRef.id)
@@ -69,50 +55,37 @@ class SupplierController extends GetxController
     update();
   }
 
-  Stream<List<SupplierModel>> readCategory() => FirebaseFirestore.instance
+  Stream<List<SupplierModel>> readSupplier() => FirebaseFirestore.instance
       .collection('petSupplier')
       .snapshots()
       .map((snapshots) => snapshots.docs
           .map((doc) => SupplierModel.fromMap(doc.data()))
           .toList());
+
 /* -------------------------------------------------------------------------- */
-/*                               Delete Category                              */
+/*                             Delete Pet Supplier                            */
 /* -------------------------------------------------------------------------- */
-  void deleteCategory(SupplierModel index1) async {
-    final category =
+  void deleteSupplier(SupplierModel index1) async {
+    final supplier =
         firebaseFirestore.collection("petSupplier").doc(index1.supplier_id);
-    category.delete();
+    supplier.delete();
     update();
   }
 
 /* -------------------------------------------------------------------------- */
-/*                                Edit Category                               */
+/*                              Edit Pet Suppiler                             */
 /* -------------------------------------------------------------------------- */
-  void updateCategory(SupplierModel index1) async {
-    // Get.snackbar('error1', titleController.text);
-    // Get.snackbar('error1', imageUrl);
-    // Get.snackbar('error2', isActive.toString());
-
+  void updateSupplier(SupplierModel index1) async {
     final fileName = basename(image!.path);
-    //Get.snackbar('error1', titleController.text);
     var storageImage = FirebaseStorage.instance.ref('petSupplier/$fileName');
     var task = storageImage.putFile(image!);
     imageUrl = await (await task).ref.getDownloadURL();
-    // final category = firebaseFirestore.collection("category").doc('uid');
-    final category =
+    final supplier =
         firebaseFirestore.collection("petSupplier").doc(index1.supplier_id);
     supplierModel.supplierName = supplierNameController.text;
-
     supplierModel.imageUrl = imageUrl;
     supplierModel.supplierCompany = supplierCompanyController.text;
-
-    await category.update(supplierModel.toMap());
-
-    // category.update({
-    //   'title': titleController.text,
-    //   'active': isActive,
-    //   'imageUrl': imageUrl
-    // });
+    await supplier.update(supplierModel.toMap());
     update();
     Get.back();
   }
