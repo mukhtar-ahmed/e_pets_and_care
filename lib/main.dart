@@ -1,12 +1,18 @@
 import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/category.dart';
+import 'package:e_pets_and_care/Admin/CategoryManagement/Views/Screens/category_screen.dart';
 import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/add_food_screen.dart';
+import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/food_screen.dart';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/add_medicine_screen.dart';
+import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/medicine_screen.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category.dart';
 import 'package:e_pets_and_care/Admin/Dashboard/Views/Screens/bottom_admin_navigation_bar.dart';
+import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category_screen.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/add_pet_screen.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/pet_screen.dart';
 import 'package:e_pets_and_care/Admin/PetSupplierManagement/Views/Screens/add_supplier_screen.dart';
 import 'package:e_pets_and_care/Admin/PetSupplierManagement/Views/Screens/supplier.dart';
 import 'package:e_pets_and_care/Admin/PetSupplierManagement/Views/Screens/supplier_screen.dart';
+import 'package:e_pets_and_care/Admin/UserManagement/Views/Screens/user_screen.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
 import 'package:e_pets_and_care/view/screens/cart_screen.dart';
@@ -56,7 +62,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: kPrimaryColor,
         ),
         // ignore: prefer_const_constructors
-        home: SupplierScreen(),
+        home: FirstScreen(),
         getPages: [
           GetPage(
               name: EditProfileScreen.id,
@@ -107,6 +113,13 @@ class MyApp extends StatelessWidget {
               name: AddSupplierScreen.id,
               page: () => const AddSupplierScreen()),
           GetPage(name: Supplier.id, page: () => const Supplier()),
+          GetPage(name: SupplierScreen.id, page: () => const SupplierScreen()),
+          GetPage(name: FoodScreen.id, page: () =>  FoodScreen()),
+          GetPage(name: MedicineScreen.id, page: () =>  MedicineScreen()),
+          GetPage(name: PetScreen.id, page: () =>  PetScreen()),
+          GetPage(name: PetCategoryScreen.id, page: () =>  PetCategoryScreen()),
+          GetPage(name: CategoryScreen.id, page: () =>  CategoryScreen()),
+          GetPage(name: UserScreen.id, page: () =>  UserScreen()),
         ],
       ),
       designSize: const Size(375, 812),

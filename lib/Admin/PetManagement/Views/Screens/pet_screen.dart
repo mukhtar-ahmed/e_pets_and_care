@@ -16,9 +16,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class PetScreen extends StatelessWidget {
+  static const String id = '/pet_screen';
   PetScreen({Key? key}) : super(key: key);
-  PetScreenCotroller petScreenCotroller =
-      Get.put(PetScreenCotroller());
+  PetScreenCotroller petScreenCotroller = Get.put(PetScreenCotroller());
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +100,8 @@ class PetScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: TextFormField(
-                                      controller: petScreenCotroller
-                                          .searchController,
+                                      controller:
+                                          petScreenCotroller.searchController,
                                       decoration: InputDecoration(
                                         // contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
                                         hintText: 'Search',
@@ -123,8 +123,7 @@ class PetScreen extends StatelessWidget {
                                           final input = query.toLowerCase();
                                           return categoryTitle.contains(input);
                                         }).toList();
-                                        petScreenCotroller
-                                            .addFill(suggestions);
+                                        petScreenCotroller.addFill(suggestions);
                                         // setState(() {
                                         //   addMedicineScreenController.fil =
                                         //       suggestions;
@@ -159,8 +158,7 @@ class PetScreen extends StatelessWidget {
                                                         .searchController.text
                                                         .trim() !=
                                                     ''
-                                                ? petScreenCotroller
-                                                    .fil[index]
+                                                ? petScreenCotroller.fil[index]
                                                 : snapShort.data![index]);
                                       }),
                                 ],
@@ -344,15 +342,15 @@ class PetScreen extends StatelessWidget {
                                               CircleAvatar(
                                                 radius: 100.r,
                                                 backgroundImage:
-                                                    petScreenCotroller
-                                                                .image !=
+                                                    petScreenCotroller.image !=
                                                             null
                                                         ? FileImage(
                                                                 petScreenCotroller
                                                                     .image!)
                                                             as ImageProvider
                                                         : NetworkImage(
-                                                            index1.itemImageUrl!,
+                                                            index1
+                                                                .itemImageUrl!,
                                                           ),
                                                 // ignore: prefer_const_literals_to_create_immutables
                                                 child: Stack(children: [
@@ -474,8 +472,9 @@ class PetScreen extends StatelessWidget {
                                               CustomeTextFormField(
                                                 keyboardType:
                                                     TextInputType.number,
-                                                defaultControllerText:
-                                                    index1.itemQuantity.toString(),
+                                                defaultControllerText: index1
+                                                    .itemQuantity
+                                                    .toString(),
                                                 textController:
                                                     petScreenCotroller
                                                         .petQuantityController,
@@ -525,8 +524,7 @@ class PetScreen extends StatelessWidget {
                                                             snapshot
                                                                 .data!.length;
                                                         i++) {
-                                                      petScreenCotroller
-                                                              .index =
+                                                      petScreenCotroller.index =
                                                           snapshot.data![i];
 
                                                       petScreenCotroller

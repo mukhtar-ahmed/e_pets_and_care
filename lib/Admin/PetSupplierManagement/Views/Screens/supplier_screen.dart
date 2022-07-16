@@ -14,6 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class SupplierScreen extends StatelessWidget {
+   static const String id = '/supplier_screen';
   const SupplierScreen({Key? key}) : super(key: key);
 
   @override

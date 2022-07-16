@@ -5,6 +5,8 @@ import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:e_pets_and_care/model/user_model.dart';
 import 'package:get/get.dart';
 
+import '../../PetSupplierManagement/Model/supplier_ model.dart';
+
 class DashboardController extends GetxController {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   var categoryLength = 0;
@@ -78,5 +80,13 @@ Stream<List<StockModel>> readStockPetCollection() => FirebaseFirestore.instance
       FirebaseFirestore.instance.collection('pet_category').snapshots().map(
           (snapshots) => snapshots.docs
               .map((doc) => PetCategoryScreenModel.fromMap(doc.data()))
+              .toList());
+/* -------------------------------------------------------------------------- */
+/*                      Pet Supplier Collection Read Data                     */
+/* -------------------------------------------------------------------------- */
+Stream<List<SupplierModel>> readSupplier() =>
+      FirebaseFirestore.instance.collection('petSupplier').snapshots().map(
+          (snapshots) => snapshots.docs
+              .map((doc) => SupplierModel.fromMap(doc.data()))
               .toList());
 }

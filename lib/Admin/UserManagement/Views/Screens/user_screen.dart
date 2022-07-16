@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 class UserScreen extends StatelessWidget {
+  static const String id = '/user_screen';
   const UserScreen({Key? key}) : super(key: key);
 
   @override

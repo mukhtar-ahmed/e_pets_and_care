@@ -18,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class MedicineScreen extends StatelessWidget {
+  static const String id = '/medicine_screen';
   MedicineScreen({Key? key}) : super(key: key);
 
   MedicineScreenController medicineScreenController =
