@@ -243,7 +243,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 CustomeButton(
                   buttonColor: Colors.orange,
                   fontColor: Colors.white,
-                  buttonText: 'Sava',
+                  buttonText: 'Save',
                   horPadding: 15,
                   onPressed: () {
                     Get.toNamed(BottomNavigationBars.id);

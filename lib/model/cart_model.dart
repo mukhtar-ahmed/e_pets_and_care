@@ -1,17 +1,21 @@
 class CartModel {
   String? productName;
+  String? uid;
   String? imageUrl;
   int? productPrice;
   String? petCategory;
   int? quantity;
   String? productId;
+  int? stock;
 
   CartModel(
       {this.productName,
       this.imageUrl,
       this.productPrice,
       this.petCategory,
+      this.uid,
       this.quantity,
+      this.stock,
       this.productId});
 
 //Receving from server
@@ -23,6 +27,8 @@ class CartModel {
       petCategory: json['petCategory'],
       quantity: json['quantity'],
       productId: json['productId'],
+      stock: json['itemQuantity'],
+      uid: json['uid'],
     );
   }
 
@@ -34,7 +40,9 @@ class CartModel {
       'productPrice': productPrice,
       'petCategory': petCategory,
       'productId': productId,
+      'itemQuantity': stock,
       'quantity': quantity,
+      'uid': uid,
     };
   }
 }

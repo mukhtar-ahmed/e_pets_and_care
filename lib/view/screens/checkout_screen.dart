@@ -1,12 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_pets_and_care/Admin/PetManagement/Controller/pet_screen_controller.dart';
 import 'package:e_pets_and_care/Controller/checkout_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
+import 'package:e_pets_and_care/view/screens/bottom_navigation_bar.dart';
+import 'package:e_pets_and_care/view/screens/home_screen.dart';
 import 'package:e_pets_and_care/view/widget/custome_button.dart';
 import 'package:e_pets_and_care/view/widget/custome_text_field_label.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../Controller/registration_screen_controller.dart';
 
 class CheckoutScreen extends StatelessWidget {
   static const String id = '/checkout_screen';
@@ -14,7 +20,21 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int total = Get.arguments;
+    List args = Get.arguments!;
+    int total = args[0];
+    int stock = args[1];
+    int quantity = args[2];
+    String itemid = args[3];
+    int finalstock = stock - quantity;
+    String? productName;
+    String? productPrice;
+    String? adress;
+    String? productQuantity;
+    String? productImage;
+    RegistrationScreenController registrationScreenController =
+        Get.put(RegistrationScreenController());
+    User? user = registrationScreenController.auth.currentUser;
+    String? orderStatus = 'Processing';
     return GetBuilder<CheckoutController>(
         init: CheckoutController(),
         builder: (checkoutController) {
@@ -156,7 +176,7 @@ class CheckoutScreen extends StatelessWidget {
                                       ConnectionState.waiting) {
                                     return Text("Loading...");
                                   }
-
+                                  adress = snapshot.data!['location'];
                                   return Text(snapshot.data!['location']);
                                 }),
                           )
@@ -204,7 +224,7 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                         /* -------------------------------- Cart Data ------------------------------- */
                         StreamBuilder<List<CartModel>>(
-                            stream: checkoutController.readCart(),
+                            stream: checkoutController.readCart(user!.uid),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
                                 return const Text('Some Thing Wrong');
@@ -221,6 +241,12 @@ class CheckoutScreen extends StatelessWidget {
                                   itemCount: snapshot.data!.length,
                                   itemBuilder: (BuildContext context, index) {
                                     var index1 = snapshot.data![index];
+                                    productName = index1.productName!;
+                                    productImage = index1.imageUrl;
+                                    productPrice =
+                                        index1.productPrice.toString();
+                                    productQuantity =
+                                        index1.quantity.toString();
                                     checkoutController.productTotalPrice.add(
                                         index1.productPrice! *
                                             index1.quantity!);
@@ -304,15 +330,28 @@ class CheckoutScreen extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text('Order Update'),
+                                title: Text('Order PLace'),
                                 content: Text('Your Order Place Successfully'),
                                 actions: [
                                   TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      checkoutController.updatequantity(
+                                          itemid, finalstock);
+
+                                      checkoutController.deleteitem(itemid);
+                                      await checkoutController.sendData(
+                                          productName,
+                                          productPrice,
+                                          adress,
+                                          productQuantity,
+                                          itemid,
+                                          user.uid,
+                                          orderStatus,
+                                          productImage);
                                       /* -------------------------------------------------------------------------- */
                                       /*                                      .                                     */
                                       /* -------------------------------------------------------------------------- */
-                                      Get.back();
+                                      Get.toNamed(BottomNavigationBars.id);
                                     },
                                     child: Text('Ok'),
                                   )

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomeProductDetailsController extends GetxController {
@@ -9,6 +10,9 @@ class CustomeProductDetailsController extends GetxController {
   bool increasePressed = false;
   bool decreasePressed = false;
   bool cartPressed = false;
+  Widget showdialog() {
+    return Container();
+  }
 
   increaseQuantity() {
     quantity = quantity + 1;
@@ -30,7 +34,8 @@ class CustomeProductDetailsController extends GetxController {
     }
   }
 
-  sendData(productName, imageUrl, productPrice, petCategoy, id) async {
+  sendData(
+      productName, imageUrl, productPrice, petCategoy, id, stock, uid) async {
     cartPressed = true;
     update();
     //final docRef = FirebaseFirestore.instance.collection("cart").doc();
@@ -40,6 +45,8 @@ class CustomeProductDetailsController extends GetxController {
     cartModel.petCategory = petCategoy;
     cartModel.productId = id;
     cartModel.quantity = quantity;
+    cartModel.stock = stock;
+    cartModel.uid = uid;
     bool exist;
 
     var a = await firebaseFirestore.collection('collection').doc(id).get();

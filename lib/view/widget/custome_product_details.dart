@@ -2,16 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/Controller/custome_product_details_controller.dart';
 import 'package:e_pets_and_care/constant.dart';
 import 'package:e_pets_and_care/model/cart_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../Controller/registration_screen_controller.dart';
+
 class CustomeProductDetails extends StatelessWidget {
   const CustomeProductDetails(
       {Key? key,
       required this.petCategoy,
+      required this.stock,
       required this.imageUrl,
       required this.productName,
       required this.productPrice,
@@ -19,6 +23,7 @@ class CustomeProductDetails extends StatelessWidget {
       required this.id})
       : super(key: key);
   final String imageUrl;
+  final int stock;
   final String productName;
   final int productPrice;
   final String productDescription;
@@ -27,6 +32,9 @@ class CustomeProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RegistrationScreenController registrationScreenController =
+        Get.put(RegistrationScreenController());
+    User? user = registrationScreenController.auth.currentUser;
     return GetBuilder<CustomeProductDetailsController>(
         init: CustomeProductDetailsController(),
         builder: (customeProductDetailsController) {
@@ -174,29 +182,33 @@ class CustomeProductDetails extends StatelessWidget {
                                                 fontSize: 20.sp,
                                                 fontWeight: FontWeight.w900),
                                           ),
-                                          GestureDetector(
-                                            onTap:
-                                                customeProductDetailsController
-                                                    .increaseQuantity,
-                                            child: Container(
-                                              height: 40.h,
-                                              width: 40.w,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    customeProductDetailsController
-                                                            .increasePressed
-                                                        ? kPrimaryColor
-                                                        : kWhiteColor,
-                                                border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                              ),
-                                              child: Icon(
-                                                Icons.add,
-                                                size: 30.sp,
+                                          if (customeProductDetailsController
+                                                  .quantity <
+                                              stock)
+                                            GestureDetector(
+                                              onTap:
+                                                  customeProductDetailsController
+                                                      .increaseQuantity,
+                                              child: Container(
+                                                height: 40.h,
+                                                width: 40.w,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      customeProductDetailsController
+                                                              .increasePressed
+                                                          ? kPrimaryColor
+                                                          : kWhiteColor,
+                                                  border: Border.all(),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.r),
+                                                ),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size: 30.sp,
+                                                ),
                                               ),
                                             ),
-                                          ),
                                         ],
                                       ),
                                     )
@@ -230,34 +242,96 @@ class CustomeProductDetails extends StatelessWidget {
                               SizedBox(
                                 height: 10.h,
                               ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Stock: ",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    stock >= 1
+                                        ? stock.toString()
+                                        : "Out of Stock",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: stock >= 1
+                                          ? Colors.black
+                                          : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               /* -------------------------------------------------------------------------- */
                               /*                                 Cart Button                                */
                               /* -------------------------------------------------------------------------- */
-                              Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  color: kPrimaryColor,
-                                ),
-                                child: customeProductDetailsController
-                                            .cartPressed ==
-                                        false
-                                    ? TextButton(
-                                        child: const Icon(
-                                          Icons.shopping_cart,
-                                          color: kWhiteColor,
-                                        ),
-                                        onPressed: () {
-                                          customeProductDetailsController
-                                              .sendData(productName, imageUrl,
-                                                  productPrice, petCategoy, id);
-                                        },
-                                      )
-                                    : SpinKitDoubleBounce(
-                                        color: kWhiteColor,
-                                        size: 40.sp,
+
+                              stock >= 1
+                                  ? Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: kPrimaryColor,
                                       ),
-                              ),
+                                      child: customeProductDetailsController
+                                                  .cartPressed ==
+                                              false
+                                          ? TextButton(
+                                              child: const Icon(
+                                                Icons.shopping_cart,
+                                                color: kWhiteColor,
+                                              ),
+                                              onPressed: () {
+                                                customeProductDetailsController
+                                                    .sendData(
+                                                  productName,
+                                                  imageUrl,
+                                                  productPrice,
+                                                  petCategoy,
+                                                  id,
+                                                  stock,
+                                                  user!.uid,
+                                                );
+                                              },
+                                            )
+                                          : SpinKitDoubleBounce(
+                                              color: kWhiteColor,
+                                              size: 40.sp,
+                                            ),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: Center(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.orange),
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.warning),
+                                                Text(
+                                                  "Sorry! this item is no longer available",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                             ],
                           ),
                         ),

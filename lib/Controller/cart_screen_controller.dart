@@ -84,9 +84,12 @@ class CartScreenController extends GetxController {
   //   firebaseFirestore.collection('cart').doc(docRef.id).set(cartModel.toMap());
   // }
 
-  Stream<List<CartModel>> readCart() {
-    return FirebaseFirestore.instance.collection('cart').snapshots().map(
-        (snapshots) => snapshots.docs
+  Stream<List<CartModel>> readCart(String uid) {
+    return FirebaseFirestore.instance
+        .collection('cart')
+        .where('uid', isEqualTo: uid)
+        .snapshots()
+        .map((snapshots) => snapshots.docs
             .map((doc) => CartModel.fromMap(doc.data()))
             .toList());
   }

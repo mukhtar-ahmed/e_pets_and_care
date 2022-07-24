@@ -4,6 +4,7 @@ import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/add_food_scre
 import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/food_screen.dart';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/add_medicine_screen.dart';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/medicine_screen.dart';
+import 'package:e_pets_and_care/Admin/Orders/admin_order_screen.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category.dart';
 import 'package:e_pets_and_care/Admin/Dashboard/Views/Screens/bottom_admin_navigation_bar.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category_screen.dart';
@@ -89,7 +90,7 @@ class MyApp extends StatelessWidget {
           GetPage(
               name: ForgotPasswordScreen.id,
               page: () => const ForgotPasswordScreen()),
-          GetPage(name: CartScreen.id, page: () => const CartScreen()),
+          GetPage(name: CartScreen.id, page: () =>  CartScreen()),
           GetPage(
               name: ItemDetailsScreen.id,
               page: () => const ItemDetailsScreen()),
@@ -120,6 +121,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: PetCategoryScreen.id, page: () =>  PetCategoryScreen()),
           GetPage(name: CategoryScreen.id, page: () =>  CategoryScreen()),
           GetPage(name: UserScreen.id, page: () =>  UserScreen()),
+          GetPage(name: AdminOrderScreen.id, page: () =>  AdminOrderScreen()),
         ],
       ),
       designSize: const Size(375, 812),

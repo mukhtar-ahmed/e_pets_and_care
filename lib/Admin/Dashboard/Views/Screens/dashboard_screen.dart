@@ -4,6 +4,8 @@ import 'package:e_pets_and_care/Admin/Dashboard/Controller/dashboard_controller.
 import 'package:e_pets_and_care/Admin/Dashboard/Views/Widget/custome_dashboard_container.dart';
 import 'package:e_pets_and_care/Admin/FoodManagement/Views/Screens/food_screen.dart';
 import 'package:e_pets_and_care/Admin/MedicineManagement/Views/Screens/medicine_screen.dart';
+import 'package:e_pets_and_care/Admin/Orders/admin_order_screen.dart';
+import 'package:e_pets_and_care/Admin/Orders/order_model.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Views/Screens/pet_category_screen.dart';
 import 'package:e_pets_and_care/Admin/PetManagement/Views/Screens/pet_screen.dart';
@@ -289,6 +291,37 @@ class DashboardScreen extends StatelessWidget {
                                   countText: snapshot.data!.length.toString(),
                                   counTextSize: 50,
                                   countName: 'Total Pet Supplier',
+                                  countNameSize: 20,
+                                ),
+                              );
+                            } else {
+                              return const Center(child: CircleAvatar());
+                            }
+                          }),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                      /* -------------------------------------------------------------------------- */
+                      /*                                    Order                                   */
+                      /* -------------------------------------------------------------------------- */
+                      StreamBuilder<List<OrderModel>>(
+                          stream: dashboardController.readOrder(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Some Thing Wrong');
+                            } else if (snapshot.hasData) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(AdminOrderScreen.id);
+                                },
+                                child: CustomeDashboardContainer(
+                                  width: 375,
+                                  icon: Icons.done,
+                                  iconSize: 150,
+                                  childContainerWidth: 150,
+                                  countText: snapshot.data!.length.toString(),
+                                  counTextSize: 50,
+                                  countName: 'Order',
                                   countNameSize: 20,
                                 ),
                               );

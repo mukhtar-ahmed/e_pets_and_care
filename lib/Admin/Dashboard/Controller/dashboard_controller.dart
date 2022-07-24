@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pets_and_care/Admin/CategoryManagement/Model/category_screen_model.dart';
+import 'package:e_pets_and_care/Admin/Orders/order_model.dart';
 import 'package:e_pets_and_care/Admin/PetCategoryManagement/Model/pet_category_screen_model.dart';
 import 'package:e_pets_and_care/Admin/stock_model.dart';
 import 'package:e_pets_and_care/model/user_model.dart';
@@ -32,7 +33,7 @@ class DashboardController extends GetxController {
 /* -------------------------------------------------------------------------- */
 /*                         Stock Collection Read Data                         */
 /* -------------------------------------------------------------------------- */
-Stream<List<StockModel>> readStockCollection() => FirebaseFirestore.instance
+  Stream<List<StockModel>> readStockCollection() => FirebaseFirestore.instance
       .collection('stock')
       .snapshots()
       .map((snapshots) =>
@@ -41,16 +42,20 @@ Stream<List<StockModel>> readStockCollection() => FirebaseFirestore.instance
 /* -------------------------------------------------------------------------- */
 /*                       Read Stock Collection For Food                       */
 /* -------------------------------------------------------------------------- */
-Stream<List<StockModel>> readStockFoodCollection() => FirebaseFirestore.instance
-      .collection('stock').where('itemCategory' ,isEqualTo: 'food')
+  Stream<List<StockModel>> readStockFoodCollection() => FirebaseFirestore
+      .instance
+      .collection('stock')
+      .where('itemCategory', isEqualTo: 'food')
       .snapshots()
       .map((snapshots) =>
           snapshots.docs.map((doc) => StockModel.fromMap(doc.data())).toList());
 /* -------------------------------------------------------------------------- */
 /*                     Read Stock Collection For Medicine                     */
 /* -------------------------------------------------------------------------- */
-Stream<List<StockModel>> readStockMedicineCollection() => FirebaseFirestore.instance
-      .collection('stock').where('itemCategory' ,isEqualTo: 'medicine')
+  Stream<List<StockModel>> readStockMedicineCollection() => FirebaseFirestore
+      .instance
+      .collection('stock')
+      .where('itemCategory', isEqualTo: 'medicine')
       .snapshots()
       .map((snapshots) =>
           snapshots.docs.map((doc) => StockModel.fromMap(doc.data())).toList());
@@ -58,8 +63,10 @@ Stream<List<StockModel>> readStockMedicineCollection() => FirebaseFirestore.inst
 /* -------------------------------------------------------------------------- */
 /*                       Read Stock Collection For Pets                       */
 /* -------------------------------------------------------------------------- */
-Stream<List<StockModel>> readStockPetCollection() => FirebaseFirestore.instance
-      .collection('stock').where('itemCategory' ,isEqualTo: 'pet')
+  Stream<List<StockModel>> readStockPetCollection() => FirebaseFirestore
+      .instance
+      .collection('stock')
+      .where('itemCategory', isEqualTo: 'pet')
       .snapshots()
       .map((snapshots) =>
           snapshots.docs.map((doc) => StockModel.fromMap(doc.data())).toList());
@@ -67,11 +74,12 @@ Stream<List<StockModel>> readStockPetCollection() => FirebaseFirestore.instance
 /* -------------------------------------------------------------------------- */
 /*                        Category Collection Read Data                       */
 /* -------------------------------------------------------------------------- */
-  Stream<List<CategoryScreenModel>> readCategory() =>
-      FirebaseFirestore.instance.collection('category').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => CategoryScreenModel.fromMap(doc.data()))
-              .toList());
+  Stream<List<CategoryScreenModel>> readCategory() => FirebaseFirestore.instance
+      .collection('category')
+      .snapshots()
+      .map((snapshots) => snapshots.docs
+          .map((doc) => CategoryScreenModel.fromMap(doc.data()))
+          .toList());
 
 /* -------------------------------------------------------------------------- */
 /*                    Pet Category Collection Read Data                       */
@@ -84,9 +92,19 @@ Stream<List<StockModel>> readStockPetCollection() => FirebaseFirestore.instance
 /* -------------------------------------------------------------------------- */
 /*                      Pet Supplier Collection Read Data                     */
 /* -------------------------------------------------------------------------- */
-Stream<List<SupplierModel>> readSupplier() =>
-      FirebaseFirestore.instance.collection('petSupplier').snapshots().map(
-          (snapshots) => snapshots.docs
-              .map((doc) => SupplierModel.fromMap(doc.data()))
-              .toList());
+  Stream<List<SupplierModel>> readSupplier() => FirebaseFirestore.instance
+      .collection('petSupplier')
+      .snapshots()
+      .map((snapshots) => snapshots.docs
+          .map((doc) => SupplierModel.fromMap(doc.data()))
+          .toList());
+
+/* -------------------------------------------------------------------------- */
+/*                         Order Collection Read Data                         */
+/* -------------------------------------------------------------------------- */
+  Stream<List<OrderModel>> readOrder() => FirebaseFirestore.instance
+      .collection('Orders')
+      .snapshots()
+      .map((snapshots) =>
+          snapshots.docs.map((doc) => OrderModel.fromMap(doc.data())).toList());
 }
