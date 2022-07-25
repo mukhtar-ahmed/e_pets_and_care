@@ -1,11 +1,10 @@
 import 'package:e_pets_and_care/Admin/Orders/order_controller.dart';
+import 'package:e_pets_and_care/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
+// ignore: must_be_immutable
 class OrderStatusUpdate extends StatefulWidget {
   String productId;
   String orderStatus;
@@ -57,15 +56,14 @@ class _OrderStatusUpdateState extends State<OrderStatusUpdate> {
         builder: (ordercontroller) {
           return Scaffold(
             appBar: AppBar(
-              title: Text(
+              title: const Text(
                 "Order Status",
-                style: TextStyle(color: Colors.white),
               ),
               centerTitle: true,
               elevation: 0,
-              backgroundColor: Colors.green,
+              backgroundColor: kPrimaryColor,
             ),
-            body: Container(
+            body: SizedBox(
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -74,96 +72,96 @@ class _OrderStatusUpdateState extends State<OrderStatusUpdate> {
                     Row(
                       children: [
                         Icon(Icons.circle_rounded,
-                            color: index >= 0 ? Colors.green : Colors.grey,
+                            color: index >= 0 ? kPrimaryColor : Colors.grey,
                             size: 20),
-                        Text("-----------  "),
+                        const Text("-----------  "),
                         Text(
                           "Processing".toUpperCase(),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20.sp),
                         ),
                       ],
                     ),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
                     Row(
                       children: [
                         Icon(Icons.circle_rounded,
-                            color: index >= 1 ? Colors.green : Colors.grey,
+                            color: index >= 1 ? kPrimaryColor : Colors.grey,
                             size: 20),
-                        Text("-----------  "),
+                        const Text("-----------  "),
                         Text(
                           "Arrived".toUpperCase(),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20.sp),
                         ),
                       ],
                     ),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
                     Row(
                       children: [
                         Icon(Icons.circle_rounded,
-                            color: index >= 2 ? Colors.green : Colors.grey,
+                            color: index >= 2 ? kPrimaryColor : Colors.grey,
                             size: 20),
-                        Text("-----------  "),
+                        const Text("-----------  "),
                         Text(
                           "Shipped".toUpperCase(),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20.sp),
                         ),
                       ],
                     ),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
                     Row(
                       children: [
                         Icon(Icons.circle_rounded,
-                            color: index >= 3 ? Colors.green : Colors.grey,
+                            color: index >= 3 ? kPrimaryColor : Colors.grey,
                             size: 20),
-                        Text("-----------  "),
+                        const Text("-----------  "),
                         Text(
                           "Out for delivery".toUpperCase(),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20.sp),
                         ),
                       ],
                     ),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
                     Row(
                       children: [
                         Icon(Icons.circle_rounded,
                             color: index >= 4 ? Colors.green : Colors.grey,
                             size: 20),
-                        Text("-----------  "),
+                        const Text("-----------  "),
                         Text(
                           "Delivered".toUpperCase(),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20.sp),
                         ),
                       ],
                     ),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
-                    Text("|"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
+                    const Text("  |"),
                     Row(
                       children: [
                         Icon(Icons.circle_rounded,
-                            color: index >= 5 ? Colors.green : Colors.grey,
+                            color: index >= 5 ? Colors.purple : Colors.grey,
                             size: 20),
-                        Text("-----------  "),
+                        const Text("-----------  "),
                         Text(
                           "Complete".toUpperCase(),
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20.sp),
                         ),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton.icon(
@@ -187,7 +185,7 @@ class _OrderStatusUpdateState extends State<OrderStatusUpdate> {
                               : index == 5
                                   ? "COMPLETED SUCCESSFULLY"
                                   : "DELIVERED SUCCESSFULLY",
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
                           // set index according to orderstatus

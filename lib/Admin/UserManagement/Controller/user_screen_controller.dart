@@ -24,8 +24,13 @@ class UserScreenController extends GetxController {
     update();
   }
 
-  deleteUser(UserModel? index1) {
-    firebaseFirestore.doc(index1!.uid!).delete();
+/* -------------------------------------------------------------------------- */
+/*                                 Delete User                                */
+/* -------------------------------------------------------------------------- */
+  void deleteUser(UserModel? index1) async {
+    final user = firebaseFirestore.collection("users").doc(index1!.uid);
+    user.delete();
+    
     update();
   }
 }

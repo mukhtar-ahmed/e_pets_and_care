@@ -1,8 +1,10 @@
 import 'package:e_pets_and_care/Admin/UserManagement/Controller/user_screen_controller.dart';
 import 'package:e_pets_and_care/model/user_model.dart';
+import 'package:e_pets_and_care/view/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 class UserScreen extends StatelessWidget {
@@ -161,16 +163,18 @@ class UserScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.toNamed(RegistrationScreen.id);
+                            },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: Colors.greenAccent,
                                 borderRadius: BorderRadius.circular(20.sp),
                               ),
                               alignment: Alignment.center,
                               height: 30.h,
                               child: Text(
-                                'Block',
+                                'Add',
                                 style: TextStyle(
                                     fontSize: 20.sp,
                                     fontWeight: FontWeight.w900),
@@ -185,7 +189,7 @@ class UserScreen extends StatelessWidget {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.red,
+                                color: Colors.redAccent,
                                 borderRadius: BorderRadius.circular(20.sp),
                               ),
                               alignment: Alignment.center,
