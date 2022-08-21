@@ -12,15 +12,15 @@ to buy pets and related things. Users can buy pets and things anywhere with acce
 Internet.
 
 # The functional scope of the system has the following main features.
- Security Management 
- Category Management
- Pet Management
- Food Management
- Stock Management
- Sale Purchase Management
- Medicine Management
- Pet Supplier Management
- Customer Management
+### Security Management
+### Category Management
+### Pet Management
+### Food Management
+### Stock Management
+### Sale Purchase Management
+### Medicine Management
+### Pet Supplier Management
+### Customer Management
 
 For More details
 # whatsaap
