@@ -1,16 +1,28 @@
-# e_pets_and_care
+# E-Pets and care
+# Final Year Project
 
-A new Flutter project.
+The main purpose was to give a framework where users can buy pets and things related to pets 
+online. Physical or manual purchases are a waste of time as well as expensive due to travel 
+expenses. Traveling due to traffic accidents is also a dangerous job. People use public or private 
+transport when they go shopping, which can lead to traffic jams. Complete purchases become 
+expensive and time-consuming. This system is designed to convert manual purchasing with a 
+proficient and successful online purchasing system. This system will be helpful to the users and 
+will keep their information secure. There is no need to go anywhere using any kind of transport 
+to buy pets and related things. Users can buy pets and things anywhere with access to the 
+Internet.
 
-## Getting Started
+# The functional scope of the system has the following main features.
+ Security Management 
+ Category Management
+ Pet Management
+ Food Management
+ Stock Management
+ Sale Purchase Management
+ Medicine Management
+ Pet Supplier Management
+ Customer Management
 
-This project is a starting point for a Flutter application.
+For More details
+# whatsaap
++923357708041
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
