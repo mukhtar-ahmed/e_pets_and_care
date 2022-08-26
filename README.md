@@ -24,8 +24,8 @@ Internet.
 
 # ScreenShort
 ## Splach , Onboarding , Registraction, Login and varifaction
-<img align="left" width="100" height="100" src="![Screenshot_20220821_225049](https://user-images.githubusercontent.com/83324580/186901228-c1568fe6-899e-4d92-b797-dfe692cf28f1.jpg)">
-<img align="left" width="100" height="100" src="![Screenshot_20220821_225035](https://user-images.githubusercontent.com/83324580/186901216-3882189d-0b1f-40ef-89c5-0660d8be5ad9.jpg)">
+<img align="left" width="250" height="250" src="![Screenshot_20220821_225049](https://user-images.githubusercontent.com/83324580/186901228-c1568fe6-899e-4d92-b797-dfe692cf28f1.jpg)">
+<img align="left" width="250" height="250" src="![Screenshot_20220821_225035](https://user-images.githubusercontent.com/83324580/186901216-3882189d-0b1f-40ef-89c5-0660d8be5ad9.jpg)">
 
 
 ![Screenshot_20220821_225040](https://user-images.githubusercontent.com/83324580/186901222-d5a1f99b-72df-4adb-b320-976f8c28cf0d.jpg)
