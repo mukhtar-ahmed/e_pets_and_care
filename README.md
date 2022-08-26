@@ -24,14 +24,15 @@ Internet.
 
 # ScreenShort
 ## Splach , Onboarding , Registraction, Login and varifaction
-![Screenshot_20220821_225124](https://user-images.githubusercontent.com/83324580/186900939-c9608cae-7009-43e5-be2c-e002c437efed.jpg)
-![Screenshot_20220821_225035](https://user-images.githubusercontent.com/83324580/186900982-8c72b1f9-e12f-4893-a3db-a6e7dd70346d.jpg)
-![Screenshot_20220821_225040](https://user-images.githubusercontent.com/83324580/186901005-291e05d5-7c69-4f84-819e-1319c92d48b9.jpg)
-![Screenshot_20220821_225045](https://user-images.githubusercontent.com/83324580/186901021-f12ac56b-ae82-4a53-b0f0-8eba0e1a6754.jpg)
-![Screenshot_20220821_225049](https://user-images.githubusercontent.com/83324580/186901041-ec19970c-16ee-4408-9033-8e022dde4b51.jpg)
-![Screenshot_20220821_225054](https://user-images.githubusercontent.com/83324580/186901054-aa95b7b1-6578-4d26-83d7-315656f81240.jpg)
-![Screenshot_20220821_225119](https://user-images.githubusercontent.com/83324580/186901070-1593aec5-1dec-4575-a6e5-cb13d76fae6b.jpg)
-![Screenshot_20220821_225124](https://user-images.githubusercontent.com/83324580/186901092-18181f83-2c49-4793-9d01-d2e7f58e4511.jpg)
+![Screenshot_20220821_225035](https://user-images.githubusercontent.com/83324580/186901216-3882189d-0b1f-40ef-89c5-0660d8be5ad9.jpg)
+![Screenshot_20220821_225040](https://user-images.githubusercontent.com/83324580/186901222-d5a1f99b-72df-4adb-b320-976f8c28cf0d.jpg)
+![Screenshot_20220821_225045](https://user-images.githubusercontent.com/83324580/186901225-6e4cf8a7-36c1-4390-9c4c-9b806059f0d9.jpg)
+![Screenshot_20220821_225049](https://user-images.githubusercontent.com/83324580/186901228-c1568fe6-899e-4d92-b797-dfe692cf28f1.jpg)
+![Screenshot_20220821_225054](https://user-images.githubusercontent.com/83324580/186901230-b4a63149-6fea-4c79-a330-67fe9760314e.jpg)
+![Screenshot_20220821_225119](https://user-images.githubusercontent.com/83324580/186901232-1b19ae27-8f16-478c-9dd1-70b80596c8a7.jpg)
+![Screenshot_20220821_225124](https://user-images.githubusercontent.com/83324580/186901235-0098c0e7-e6eb-4eda-9f6a-10d5f8d4b953.jpg)
+![Screenshot_20220821_225031](https://user-images.githubusercontent.com/83324580/186901237-5e01be2d-fe56-4a81-b4b6-c34f342e00bc.jpg)
+
 
 
 
