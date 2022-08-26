@@ -24,7 +24,15 @@ Internet.
 
 # ScreenShort
 ## Splach , Onboarding , Registraction, Login and varifaction
-![Screenshot_20220821_225124](https://user-images.githubusercontent.com/83324580/186900806-40c1cf88-11df-43b2-9ec2-ac136f05e860.jpg)
+![Screenshot_20220821_225124](https://user-images.githubusercontent.com/83324580/186900939-c9608cae-7009-43e5-be2c-e002c437efed.jpg)
+![Screenshot_20220821_225035](https://user-images.githubusercontent.com/83324580/186900982-8c72b1f9-e12f-4893-a3db-a6e7dd70346d.jpg)
+![Screenshot_20220821_225040](https://user-images.githubusercontent.com/83324580/186901005-291e05d5-7c69-4f84-819e-1319c92d48b9.jpg)
+![Screenshot_20220821_225045](https://user-images.githubusercontent.com/83324580/186901021-f12ac56b-ae82-4a53-b0f0-8eba0e1a6754.jpg)
+![Screenshot_20220821_225049](https://user-images.githubusercontent.com/83324580/186901041-ec19970c-16ee-4408-9033-8e022dde4b51.jpg)
+![Screenshot_20220821_225054](https://user-images.githubusercontent.com/83324580/186901054-aa95b7b1-6578-4d26-83d7-315656f81240.jpg)
+![Screenshot_20220821_225119](https://user-images.githubusercontent.com/83324580/186901070-1593aec5-1dec-4575-a6e5-cb13d76fae6b.jpg)
+![Screenshot_20220821_225124](https://user-images.githubusercontent.com/83324580/186901092-18181f83-2c49-4793-9d01-d2e7f58e4511.jpg)
+
 
 
 For More details
